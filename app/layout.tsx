@@ -1,25 +1,12 @@
 import type { Metadata } from "next";
-// import { Poppins } from "next/font/google";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
-import {
-  Container,
-  Theme,
-  ThemePanel,
-  useThemeContext,
-} from "@radix-ui/themes";
+import { Theme } from "@radix-ui/themes";
 import "../theme-config.css";
-import NavBar from "./admin/NavBar";
+// import NavBar from "./admin/NavBar";
 import { Toaster } from "react-hot-toast";
 import GoBack from "./components/GoBack";
 import AuthProvider from "./auth/Provider";
-
-// const poppins = Poppins({
-//   weight: ["300", "400", "500", "600", "700", "800", "900"],
-//   subsets: ["latin"],
-//   display: "swap",
-//   variable: "--font-poppins",
-// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -45,12 +32,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      {/* poppins.variable + "  */}
       <body className={""}>
         <Theme accentColor="violet">
           <Toaster />
           <AuthProvider>
-            {/* bg-slate-100  */}
             <main className={`h-screen bg-slate-100`}>{children}</main>
           </AuthProvider>
         </Theme>
