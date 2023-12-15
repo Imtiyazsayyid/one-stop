@@ -11,14 +11,14 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  firstName  String
-  lastName   String
-  email      String
+  id        Int    @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String
 
   userTypeId Int
   userType   UserType @relation(fields: [userTypeId], references: [id])
-  
+
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
@@ -28,6 +28,42 @@ model UserType {
   id    Int    @id @default(autoincrement())
   name  String
   users User[]
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Course {
+  id        Int        @id @default(autoincrement())
+  name      String
+  duration  Int // years
+  semesters Semester[]
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Semester {
+  id         Int    @id @default(autoincrement())
+  sem_number Int
+  name       String
+  courseId   Int
+  course     Course @relation(fields: [courseId], references: [id])
+
+  subjects Subject[]
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Subject {
+  id         Int      @id @default(autoincrement())
+  name       String
+  semesterId Int
+  semester   Semester @relation(fields: [semesterId], references: [id])
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
