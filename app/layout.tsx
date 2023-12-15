@@ -36,7 +36,7 @@ export default function RootLayout({
         <Theme accentColor="violet">
           <Toaster />
           <AuthProvider>
-            <main className={`h-screen bg-slate-100`}>{children}</main>
+            <main className={`h-screen bg-slate-50`}>{children}</main>
           </AuthProvider>
         </Theme>
       </body>
