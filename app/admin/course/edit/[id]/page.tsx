@@ -38,7 +38,7 @@ const EditCoursePage = ({ params }: Props) => {
 
   return (
     <Flex direction={"column"} className="w-full" gap={"2"}>
-      <HeadingCard title="Edit Course"></HeadingCard>
+      <HeadingCard title={`Edit Course - ${course?.name || ""} `}></HeadingCard>
       <Card className="p-10 flex-col overflow-hidden overflow-y-scroll">
         <Form
           id={course?.id}

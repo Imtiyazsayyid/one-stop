@@ -39,6 +39,19 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const subject = await prisma.subject.findUnique({
+      where: {
+        code: body.code,
+      },
+    });
+
+    if (subject) {
+      return NextResponse.json({
+        error: "Subject Code Already Exists.",
+        status: false,
+      });
+    }
+
     const newSubject = await prisma.subject.create({
       data: {
         name: body.name,

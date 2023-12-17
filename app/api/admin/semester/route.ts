@@ -17,6 +17,9 @@ export async function GET(request: NextRequest) {
       where: {
         courseId: parseInt(courseId),
       },
+      orderBy: {
+        semNumber: "asc",
+      },
     });
     return NextResponse.json({ data: semesters, status: true });
   } catch (error) {

@@ -36,20 +36,6 @@ export async function PUT(
       });
     }
 
-    const semester = await prisma.semester.findFirst({
-      where: {
-        semNumber: body.semNumber,
-        courseId: body.courseId,
-      },
-    });
-
-    if (semester) {
-      return NextResponse.json({
-        error: "Semester Already Exists",
-        status: false,
-      });
-    }
-
     const updatedSemester = await prisma.semester.update({
       data: {
         semNumber: body.semNumber,

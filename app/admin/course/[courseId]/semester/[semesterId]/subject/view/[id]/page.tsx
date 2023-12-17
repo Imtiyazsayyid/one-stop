@@ -57,7 +57,7 @@ const EditSubjectPage = ({ params }: Props) => {
 
             <Flex direction={"column"}>
               <Text className="text-slate-500 text-xs">Subject Code</Text>
-              <Text>{subject?.code} years</Text>
+              <Text>{subject?.code}</Text>
             </Flex>
           </Flex>
 
