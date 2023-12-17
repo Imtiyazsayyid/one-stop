@@ -1,14 +1,33 @@
 import z from "zod";
 
-const boardSchema = z.object({
-  boardName: z
-    .string({ required_error: "Board Name is required" })
-    .min(3, "Board Name is too short")
-    .max(45, "Board Name is too long"),
-  boardShortForm: z
-    .string({ required_error: "Board Shorform is required" })
-    .min(1, "Board Shortform is too short")
-    .max(10, "Board Shortform is too long"),
+const courseSchema = z.object({
+  name: z
+    .string({ required_error: "Course Name is required" })
+    .min(3, "Course Name is too short")
+    .max(100, "Course Name is too long"),
+  abbr: z
+    .string({ required_error: "Course Abbreviation is required" })
+    .min(1, "Course Abbreviation is too short")
+    .max(10, "Course Abbreviation is too long"),
+  duration: z.number({
+    required_error: "Duration is required",
+    invalid_type_error: "Duration is required",
+  }),
+});
+
+const semesterSchema = z.object({
+  duration: z.number({
+    required_error: "Duration is required",
+    invalid_type_error: "Duration is required",
+  }),
+  courseId: z.number({
+    required_error: "Semester Course is required",
+    invalid_type_error: "Semester Course is required",
+  }),
+  semNumber: z.number({
+    required_error: "Sem Number is required",
+    invalid_type_error: "Sem Number is required",
+  }),
 });
 
 const gradeSchema = z.object({
@@ -107,13 +126,4 @@ const studentSchema = z.object({
   }),
 });
 
-export {
-  boardSchema,
-  gradeSchema,
-  subjectSchema,
-  teacherSchema,
-  lectureGroupSchema,
-  chapterSchema,
-  topicSchema,
-  studentSchema,
-};
+export { courseSchema, semesterSchema };

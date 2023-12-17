@@ -37,7 +37,10 @@ model UserType {
 model Course {
   id        Int        @id @default(autoincrement())
   name      String
+  abbr      String
   duration  Int // years
+  description String? @db.Text
+  course_outcome String? @db.Text
   semesters Semester[]
 
   status     Boolean  @default(true)
@@ -47,8 +50,8 @@ model Course {
 
 model Semester {
   id         Int    @id @default(autoincrement())
-  sem_number Int
-  name       String
+  semNumber Int
+  duration  String
   courseId   Int
   course     Course @relation(fields: [courseId], references: [id])
 

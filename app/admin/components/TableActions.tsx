@@ -1,42 +1,84 @@
 "use client";
-import { EyeOpenIcon, Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
+import DeleteConfirmation from "@/app/components/DeleteConfirmation";
+import {
+  ArrowRightIcon,
+  EyeOpenIcon,
+  Pencil2Icon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import { Button, Flex } from "@radix-ui/themes";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
+import toast from "react-hot-toast";
 
 interface Props {
   editLink?: string;
   viewLink?: string;
   deleteLink?: string;
+  gotoLink?: string;
+  fetchData: () => {};
 }
 
-const TableActions = ({ editLink, viewLink, deleteLink }: Props) => {
+const TableActions = ({
+  editLink,
+  viewLink,
+  deleteLink,
+  gotoLink,
+  fetchData,
+}: Props) => {
   const router = useRouter();
 
+  const handleDelete = async () => {
+    try {
+      if (deleteLink) {
+        const res = await axios.delete(deleteLink);
+        if (!res.data.status) {
+          toast.error(res.data.error);
+        }
+        toast.success("Deleted Successfully");
+
+        fetchData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <Flex gap={"2"}>
-      {editLink && (
-        <Button variant="soft" onClick={() => router.push(editLink)}>
-          <Pencil2Icon />
-        </Button>
-      )}
+    <Flex
+      gap={"2"}
+      className="shadow-sm w-fit p-2 rounded-full border"
+      justify={"center"}
+    >
       {viewLink && (
         <Button
           variant="soft"
           color="blue"
           onClick={() => router.push(viewLink)}
+          radius="full"
         >
           <EyeOpenIcon />
         </Button>
       )}
-
-      {deleteLink && (
+      {editLink && (
         <Button
           variant="soft"
-          color="red"
-          onClick={() => router.push(deleteLink)}
+          onClick={() => router.push(editLink)}
+          radius="full"
         >
-          <TrashIcon />
+          <Pencil2Icon />
+        </Button>
+      )}
+      {deleteLink && <DeleteConfirmation confirmDelete={handleDelete} />}
+      {gotoLink && (
+        <Button
+          variant="soft"
+          onClick={() => router.push(gotoLink)}
+          radius="full"
+          color="green"
+        >
+          <ArrowRightIcon />
         </Button>
       )}
     </Flex>

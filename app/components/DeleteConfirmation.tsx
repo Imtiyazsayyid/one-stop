@@ -3,36 +3,27 @@ import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import React from "react";
 
 interface Props {
-  itemToBeDeletedType: string;
-  itemToBeDeletedName: string;
   confirmDelete: () => void;
 }
 
-const DeleteConfirmation = ({
-  itemToBeDeletedName,
-  itemToBeDeletedType,
-  confirmDelete,
-}: Props) => {
+const DeleteConfirmation = ({ confirmDelete }: Props) => {
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger>
-        <Button color="red" variant="soft">
+        <Button color="red" variant="soft" radius="full">
           <TrashIcon />
         </Button>
       </AlertDialog.Trigger>
       <AlertDialog.Content style={{ maxWidth: 450 }}>
-        <AlertDialog.Title>Delete {itemToBeDeletedType}</AlertDialog.Title>
+        <AlertDialog.Title>Delete Item.</AlertDialog.Title>
         <AlertDialog.Description size="2">
-          Are you sure you want to remove {itemToBeDeletedName}
+          Are you sure you want to remove this item? <br />
+          This action cannot be reversed.
         </AlertDialog.Description>
 
-        <Flex gap="3" mt="4" justify="end">
+        <Flex gap="3" mt="8" justify="end">
           <AlertDialog.Cancel>
-            <Button
-              variant="soft"
-              color="gray"
-              //   onClick={() => setChoice(false)}
-            >
+            <Button variant="soft" color="gray">
               Cancel
             </Button>
           </AlertDialog.Cancel>

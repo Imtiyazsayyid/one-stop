@@ -1,3 +1,5 @@
+"use client";
+import GoBack from "@/app/components/GoBack";
 import { Flex, Heading } from "@radix-ui/themes";
 import React from "react";
 
@@ -10,9 +12,13 @@ const HeadingCard = ({ title }: Props) => {
     <Flex
       className="border rounded-lg bg-white shadow-sm w-full h-20"
       align={"center"}
+      gap={"5"}
       pl={"5"}
     >
-      <Heading>{title}</Heading>
+      <GoBack />
+      <Heading size={"4"} weight={"bold"}>
+        {title || ""}
+      </Heading>
     </Flex>
   );
 };
