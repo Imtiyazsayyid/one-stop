@@ -51,7 +51,7 @@ model Course {
 model Semester {
   id         Int    @id @default(autoincrement())
   semNumber Int
-  duration  String
+  duration  Int
   courseId   Int
   course     Course @relation(fields: [courseId], references: [id])
 

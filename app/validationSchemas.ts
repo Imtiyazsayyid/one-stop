@@ -17,12 +17,8 @@ const courseSchema = z.object({
 
 const semesterSchema = z.object({
   duration: z.number({
-    required_error: "Duration is required",
-    invalid_type_error: "Duration is required",
-  }),
-  courseId: z.number({
-    required_error: "Semester Course is required",
-    invalid_type_error: "Semester Course is required",
+    required_error: "Sem Number is required",
+    invalid_type_error: "Sem Number is required",
   }),
   semNumber: z.number({
     required_error: "Sem Number is required",

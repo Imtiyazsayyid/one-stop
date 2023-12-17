@@ -1,1 +1,12 @@
-{}
+{
+  "/api/admin/semester/route": "app/api/admin/semester/route.js",
+  "/api/admin/course/route": "app/api/admin/course/route.js",
+  "/api/admin/course/[id]/route": "app/api/admin/course/[id]/route.js",
+  "/admin/course/[courseId]/semester/new/page": "app/admin/course/[courseId]/semester/new/page.js",
+  "/admin/course/[courseId]/semester/page": "app/admin/course/[courseId]/semester/page.js",
+  "/admin/course/page": "app/admin/course/page.js",
+  "/admin/course/[courseId]/semester/edit/[id]/page": "app/admin/course/[courseId]/semester/edit/[id]/page.js",
+  "/admin/course/edit/[id]/page": "app/admin/course/edit/[id]/page.js",
+  "/admin/course/view/[id]/page": "app/admin/course/view/[id]/page.js",
+  "/admin/course/new/page": "app/admin/course/new/page.js"
+}

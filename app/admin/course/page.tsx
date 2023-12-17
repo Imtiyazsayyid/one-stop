@@ -1,5 +1,5 @@
 "use client";
-import { Flex, Table } from "@radix-ui/themes";
+import { Button, Flex, Table } from "@radix-ui/themes";
 import AddNewButton from "../components/AddNewButton";
 import Card from "../components/Card";
 import HeadingCard from "../components/HeadingCard";
@@ -8,9 +8,12 @@ import { useEffect, useState } from "react";
 import { Course } from "@prisma/client";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 const CoursePage = () => {
   const [courses, setCourses] = useState<Course[]>();
+  const router = useRouter();
 
   const getAllCourses = async () => {
     const res = await axios.get("/api/admin/course");
@@ -41,6 +44,7 @@ const CoursePage = () => {
                 <Table.ColumnHeaderCell>Abbreviation</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Duration</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Semesters</Table.ColumnHeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -56,9 +60,22 @@ const CoursePage = () => {
                       editLink={`/admin/course/edit/${course.id}`}
                       viewLink={`/admin/course/view/${course.id}`}
                       deleteLink={`/api/admin/course/${course.id}`}
-                      gotoLink={`/admin/course/${course.id}/semesters`}
                       fetchData={getAllCourses}
                     />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Flex className="p-1 shadow-md border w-fit rounded-full">
+                      <Button
+                        variant="soft"
+                        onClick={() =>
+                          router.push(`/admin/course/${course.id}/semester`)
+                        }
+                        radius="full"
+                        color="green"
+                      >
+                        <ArrowRightIcon />
+                      </Button>
+                    </Flex>
                   </Table.Cell>
                 </Table.Row>
               ))}

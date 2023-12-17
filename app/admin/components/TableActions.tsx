@@ -16,17 +16,10 @@ interface Props {
   editLink?: string;
   viewLink?: string;
   deleteLink?: string;
-  gotoLink?: string;
   fetchData: () => {};
 }
 
-const TableActions = ({
-  editLink,
-  viewLink,
-  deleteLink,
-  gotoLink,
-  fetchData,
-}: Props) => {
+const TableActions = ({ editLink, viewLink, deleteLink, fetchData }: Props) => {
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -71,16 +64,6 @@ const TableActions = ({
         </Button>
       )}
       {deleteLink && <DeleteConfirmation confirmDelete={handleDelete} />}
-      {gotoLink && (
-        <Button
-          variant="soft"
-          onClick={() => router.push(gotoLink)}
-          radius="full"
-          color="green"
-        >
-          <ArrowRightIcon />
-        </Button>
-      )}
     </Flex>
   );
 };

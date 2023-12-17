@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import SemAdder from "./components/SemAdder";
 
 interface Props {
   id?: number;
@@ -120,12 +119,7 @@ const Form = ({
   };
 
   return (
-    <Flex
-      // max-h-[10vh]
-      className="w-full h-full px-10 py-20"
-      direction={"column"}
-      gap={"5"}
-    >
+    <Flex className="w-full h-full px-10 py-20" direction={"column"} gap={"5"}>
       <Flex className="w-full" gap={"4"} align={"end"}>
         {/* course name */}
         <Flex direction={"column"} className="w-1/3">
@@ -197,14 +191,21 @@ const Form = ({
         </Flex>
       </Flex>
 
-      <Flex gap={"4"}>
-        <SemAdder />
-      </Flex>
-
       <Flex justify={"center"} mt={"9"}>
-        <Flex direction={"column"} className="w-1/3" mb={"9"}>
-          {!id && <Button onClick={() => handleSave()}>Submit</Button>}
-          {id && <Button onClick={() => handleUpdate()}>Save Changes</Button>}
+        <Flex className="w-1/3" mb={"9"} gap={"2"}>
+          {!id && (
+            <Button onClick={() => handleSave()} className="w-1/2">
+              Submit
+            </Button>
+          )}
+          {id && (
+            <Button onClick={() => handleUpdate()} className="w-1/2">
+              Save Changes
+            </Button>
+          )}
+          <Button onClick={() => router.back()} className="w-1/2" color="red">
+            Cancel
+          </Button>
         </Flex>
       </Flex>
     </Flex>

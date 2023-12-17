@@ -3,8 +3,21 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  const courseId = request.nextUrl.searchParams.get("courseId");
+
+  if (!courseId) {
+    return NextResponse.json({
+      error: "Please Send Course ID",
+      status: false,
+    });
+  }
+
   try {
-    const semesters = await prisma.semester.findMany();
+    const semesters = await prisma.semester.findMany({
+      where: {
+        courseId: parseInt(courseId),
+      },
+    });
     return NextResponse.json({ data: semesters, status: true });
   } catch (error) {
     return NextResponse.json({
@@ -22,6 +35,20 @@ export async function POST(request: NextRequest) {
     if (!validation.success) {
       return NextResponse.json({
         error: "Invalid Details",
+        status: false,
+      });
+    }
+
+    const semester = await prisma.semester.findFirst({
+      where: {
+        semNumber: body.semNumber,
+        courseId: body.courseId,
+      },
+    });
+
+    if (semester) {
+      return NextResponse.json({
+        error: "Semester Already Exists",
         status: false,
       });
     }
