@@ -9,6 +9,7 @@ import { Semester } from "@prisma/client";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 
 interface Props {
   params: {
@@ -18,6 +19,7 @@ interface Props {
 
 const SemesterPage = ({ params }: Props) => {
   const [semesters, setSemesters] = useState<Semester[]>();
+  const router = useRouter();
 
   const getAllSemesters = async () => {
     const res = await axios.get("/api/admin/semester", {
@@ -75,9 +77,11 @@ const SemesterPage = ({ params }: Props) => {
                     <Flex className="p-1 shadow-md border w-fit rounded-full">
                       <Button
                         variant="soft"
-                        // onClick={() =>
-                        //   router.push(`/admin/course/${course.id}/semester`)
-                        // }
+                        onClick={() =>
+                          router.push(
+                            `/admin/course/${params.courseId}/semester/${semester.id}/subject`
+                          )
+                        }
                         radius="full"
                         color="green"
                       >

@@ -26,31 +26,26 @@ const semesterSchema = z.object({
   }),
 });
 
+const subjectSchema = z.object({
+  name: z
+    .string({ required_error: "Subject Name is required" })
+    .min(3, "Subject Name is too short")
+    .max(45, "Subject Name is too long"),
+  abbr: z
+    .string({ required_error: "Subject Abbreviation is required" })
+    .min(1, "Subject Abbreviation is too short")
+    .max(10, "Subject Abbreviation is too long"),
+  code: z
+    .string({ required_error: "Subject Code is required" })
+    .min(3, "Subject Code is too short")
+    .max(45, "Subject Code is too long"),
+});
+
 const gradeSchema = z.object({
   gradeName: z
     .string({ required_error: "Grade Name is required" })
     .min(3, "Grade Name is too short")
     .max(45, "Grade Name is too long"),
-});
-
-const subjectSchema = z.object({
-  subjectName: z
-    .string({ required_error: "Subject Name is required" })
-    .min(3, "Subject Name is too short")
-    .max(45, "Subject Name is too long"),
-  subjectShortForm: z
-    .string({ required_error: "Subject Shortform is required" })
-    .min(1, "Subject Shortform is too short")
-    .max(10, "Subject Shortform is too long"),
-  subjectImage: z.string({ required_error: "Subject Image is required" }),
-  gradeId: z.number({
-    required_error: "Subject Grade is required",
-    invalid_type_error: "Subject Grade is required",
-  }),
-  boardId: z.number({
-    required_error: "Subject Board is required",
-    invalid_type_error: "Subject Board is required",
-  }),
 });
 
 const teacherSchema = z.object({
@@ -122,4 +117,4 @@ const studentSchema = z.object({
   }),
 });
 
-export { courseSchema, semesterSchema };
+export { courseSchema, semesterSchema, subjectSchema };

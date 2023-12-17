@@ -65,6 +65,8 @@ model Semester {
 model Subject {
   id         Int      @id @default(autoincrement())
   name       String
+  abbr       String
+  code       String
   semesterId Int
   semester   Semester @relation(fields: [semesterId], references: [id])
 
