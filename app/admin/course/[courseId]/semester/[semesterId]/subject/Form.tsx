@@ -1,7 +1,8 @@
 "use client";
 
 import { subjectSchema } from "@/app/validationSchemas";
-import { Button, Flex, Text, TextField } from "@radix-ui/themes";
+import { SubjectType } from "@prisma/client";
+import { Button, Flex, Select, Text, TextField } from "@radix-ui/themes";
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -13,17 +14,30 @@ interface Props {
   name?: string;
   abbr?: string;
   code?: string;
+  credits?: number;
   duration?: number;
   courseId: number;
   semesterId: number;
+  subjectType?: SubjectType | undefined | null;
 }
 
-const Form = ({ id, name, abbr, code, semesterId, courseId }: Props) => {
+const Form = ({
+  id,
+  name,
+  abbr,
+  code,
+  semesterId,
+  courseId,
+  credits,
+  subjectType,
+}: Props) => {
   useEffect(() => {
     setSubjectDetails({
       name: name || "",
       abbr: abbr || "",
       code: code || "",
+      credits: credits || 0,
+      subjectType: subjectType,
     });
   }, [name, abbr, code]);
 
@@ -33,12 +47,16 @@ const Form = ({ id, name, abbr, code, semesterId, courseId }: Props) => {
     name: "",
     abbr: "",
     code: "",
+    credits: "",
+    subjectType: "",
   });
 
   const [subjectDetails, setSubjectDetails] = useState({
     name: "",
     abbr: "",
     code: "",
+    credits: 0,
+    subjectType: subjectType,
   });
 
   const handleSave = async () => {
@@ -46,6 +64,8 @@ const Form = ({ id, name, abbr, code, semesterId, courseId }: Props) => {
       name: "",
       abbr: "",
       code: "",
+      credits: "",
+      subjectType: "",
     }));
 
     const validation = subjectSchema.safeParse(subjectDetails);
@@ -81,6 +101,8 @@ const Form = ({ id, name, abbr, code, semesterId, courseId }: Props) => {
       name: "",
       abbr: "",
       code: "",
+      credits: "",
+      subjectType: "",
     }));
 
     const validation = subjectSchema.safeParse(subjectDetails);
@@ -164,6 +186,56 @@ const Form = ({ id, name, abbr, code, semesterId, courseId }: Props) => {
               }
             />
           </TextField.Root>
+        </Flex>
+      </Flex>
+
+      <Flex className="w-full" align={"end"} gap={"4"}>
+        {/* Subject Credits */}
+        <Flex direction={"column"} className="w-1/3">
+          <Text className="text-xs text-slate-400">Subject Credits</Text>
+          <Text className="text-xs text-red-400">{errors.credits}</Text>
+          <TextField.Root>
+            <TextField.Input
+              value={subjectDetails.credits}
+              type="number"
+              onChange={(e) =>
+                setSubjectDetails({
+                  ...subjectDetails,
+                  credits: parseInt(e.target.value),
+                })
+              }
+            />
+          </TextField.Root>
+        </Flex>
+
+        {/* Subject Type */}
+        <Flex direction={"column"} className="w-1/3">
+          <Text className="text-xs text-slate-400">Subject Type</Text>
+          <Text className="text-xs text-red-400">{errors.subjectType}</Text>
+          <Select.Root
+            value={subjectDetails.subjectType || undefined}
+            defaultValue={"core_subject"}
+            onValueChange={(val) =>
+              setSubjectDetails({
+                ...subjectDetails,
+                subjectType: val as SubjectType,
+              })
+            }
+          >
+            <Select.Trigger />
+            <Select.Content position="popper">
+              <Select.Item value="core_subject">Core Subject</Select.Item>
+              <Select.Item value="core_subject_practical">
+                Core Subject Practical
+              </Select.Item>
+              <Select.Item value="ability_enhancement_skill_course">
+                Ability Enhancement Skill Course
+              </Select.Item>
+              <Select.Item value="ability_enhancement_skill_practical">
+                Ability Enhancement Skill Practical
+              </Select.Item>
+            </Select.Content>
+          </Select.Root>
         </Flex>
       </Flex>
 

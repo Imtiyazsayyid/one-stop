@@ -68,7 +68,6 @@ const SemesterPage = ({ params }: Props) => {
                   <Table.Cell>
                     <TableActions
                       editLink={`/admin/course/${params.courseId}/semester/edit/${semester.id}`}
-                      viewLink={`/admin/course/${params.courseId}/semester/view/${semester.id}`}
                       deleteLink={`/api/admin/semester/${semester.id}`}
                       fetchData={getAllSemesters}
                     />

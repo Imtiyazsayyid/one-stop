@@ -8,7 +8,7 @@ const courseSchema = z.object({
   abbr: z
     .string({ required_error: "Course Abbreviation is required" })
     .min(1, "Course Abbreviation is too short")
-    .max(10, "Course Abbreviation is too long"),
+    .max(20, "Course Abbreviation is too long"),
   duration: z.number({
     required_error: "Duration is required",
     invalid_type_error: "Duration is required",
@@ -30,15 +30,19 @@ const subjectSchema = z.object({
   name: z
     .string({ required_error: "Subject Name is required" })
     .min(3, "Subject Name is too short")
-    .max(45, "Subject Name is too long"),
+    .max(100, "Subject Name is too long"),
   abbr: z
     .string({ required_error: "Subject Abbreviation is required" })
     .min(1, "Subject Abbreviation is too short")
-    .max(10, "Subject Abbreviation is too long"),
+    .max(20, "Subject Abbreviation is too long"),
   code: z
     .string({ required_error: "Subject Code is required" })
     .min(3, "Subject Code is too short")
     .max(45, "Subject Code is too long"),
+  credits: z.number({
+    required_error: "Credits are required",
+    invalid_type_error: "Credits are required",
+  }),
 });
 
 const gradeSchema = z.object({

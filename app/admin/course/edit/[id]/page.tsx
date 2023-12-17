@@ -43,10 +43,17 @@ const EditCoursePage = ({ params }: Props) => {
         <Form
           id={course?.id}
           abbr={course?.abbr}
-          course_outcome={course?.course_outcome || ""}
+          programOutcome={course?.programOutcome || ""}
           description={course?.description || ""}
           name={course?.name}
           duration={course?.duration}
+          aboutFacility={course?.aboutFacility || ""}
+          departmentalStrength={course?.departmentalStrength || ""}
+          eligibilty={course?.eligibilty || ""}
+          mission={course?.mission || ""}
+          significance={course?.significance || ""}
+          technicalActivities={course?.technicalActivities || ""}
+          vision={course?.vision || ""}
         />
       </Card>
     </Flex>

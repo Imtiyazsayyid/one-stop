@@ -13,7 +13,7 @@ const FormattedHTML = ({ value }: Props) => {
         // Add other styles as needed
       }}
       dangerouslySetInnerHTML={{
-        __html: value || "",
+        __html: value || "-",
       }}
     />
   );

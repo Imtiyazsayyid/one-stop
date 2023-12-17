@@ -47,21 +47,21 @@ const EditCoursePage = ({ params }: Props) => {
       <Card className="h-full p-10 flex-col pt-20 overflow-hidden overflow-y-scroll">
         <Flex className="p-10" direction={"column"} gap={"9"} align={"center"}>
           <Flex justify={"between"} className="px-10 w-2/3">
-            <Flex direction={"column"}>
+            <Flex direction={"column"} gap={"2"}>
               <Text className="text-slate-500 text-xs">Course Name</Text>
-              <Text>{course?.name}</Text>
+              <Text>{course?.name || "-"}</Text>
             </Flex>
 
-            <Flex direction={"column"}>
+            <Flex direction={"column"} gap={"2"}>
               <Text className="text-slate-500 text-xs">
                 Course Abbreviation
               </Text>
-              <Text>{course?.abbr}</Text>
+              <Text>{course?.abbr || "-"}</Text>
             </Flex>
 
-            <Flex direction={"column"}>
+            <Flex direction={"column"} gap={"2"}>
               <Text className="text-slate-500 text-xs">Course Duration</Text>
-              <Text>{course?.duration} years</Text>
+              <Text>{course?.duration || "-"} years</Text>
             </Flex>
           </Flex>
 
@@ -69,7 +69,7 @@ const EditCoursePage = ({ params }: Props) => {
             <Seperator className="w-full" />
           </Flex>
 
-          <Flex direction={"column"} className="w-2/3 px-10">
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
             <Text className="text-slate-500 text-xs">Course Description</Text>
             <div>
               <FormattedHTML value={course?.description || ""} />
@@ -80,10 +80,10 @@ const EditCoursePage = ({ params }: Props) => {
             <Seperator className="w-full" />
           </Flex>
 
-          <Flex direction={"column"} className="w-2/3 px-10">
-            <Text className="text-slate-500 text-xs">Course Outcome</Text>
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">Program Outcome</Text>
             <div>
-              <FormattedHTML value={course?.course_outcome || ""} />
+              <FormattedHTML value={course?.programOutcome || ""} />
             </div>
           </Flex>
 
@@ -91,18 +91,99 @@ const EditCoursePage = ({ params }: Props) => {
             <Seperator className="w-full" />
           </Flex>
 
-          <Flex direction={"column"} className="w-2/3" gap={"2"}>
-            <Text className="text-slate-500 text-xs">Semesters</Text>
-            <Flex
-              className="p-2 w-[60rem] bg-slate-100 rounded-lg"
-              gap={"2"}
-              direction={"column"}
-            >
-              {course?.semesters.map((sem) => (
-                <SemesterContainer semester={sem} key={sem.id} />
-              ))}
-            </Flex>
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">
+              Departmental Strength
+            </Text>
+            <div>
+              <FormattedHTML value={course?.departmentalStrength || ""} />
+            </div>
           </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">About our Facility</Text>
+            <div>
+              <FormattedHTML value={course?.aboutFacility || ""} />
+            </div>
+          </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">Eligibility</Text>
+            <div>
+              <FormattedHTML value={course?.eligibilty || ""} />
+            </div>
+          </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">Significance</Text>
+            <div>
+              <FormattedHTML value={course?.significance || ""} />
+            </div>
+          </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">Mission</Text>
+            <div>
+              <FormattedHTML value={course?.mission || ""} />
+            </div>
+          </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">Vision</Text>
+            <div>
+              <FormattedHTML value={course?.vision || ""} />
+            </div>
+          </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
+            <Text className="text-slate-500 text-xs">Technical Activities</Text>
+            <div>
+              <FormattedHTML value={course?.technicalActivities || ""} />
+            </div>
+          </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          {course?.semesters && course?.semesters.length > 0 && (
+            <Flex direction={"column"} className="w-2/3" gap={"2"}>
+              <Text className="text-slate-500 text-xs">Semesters</Text>
+              <Flex
+                className="p-2 w-[60rem] bg-slate-100 rounded-lg"
+                gap={"2"}
+                direction={"column"}
+              >
+                {course?.semesters.map((sem) => (
+                  <SemesterContainer semester={sem} key={sem.id} />
+                ))}
+              </Flex>
+            </Flex>
+          )}
         </Flex>
       </Card>
     </Flex>

@@ -41,6 +41,8 @@ export async function PUT(
         name: body.name,
         abbr: body.abbr,
         code: body.code,
+        credits: body.credits,
+        subjectType: body.subjectType,
         semesterId: parseInt(body.semesterId),
       },
       where: {

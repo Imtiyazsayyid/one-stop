@@ -10,6 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
+import Pagination from "@/app/components/Pagination";
 
 const CoursePage = () => {
   const [courses, setCourses] = useState<Course[]>();

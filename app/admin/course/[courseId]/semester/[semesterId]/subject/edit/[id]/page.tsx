@@ -49,9 +49,11 @@ const EditSubjectPage = ({ params }: Props) => {
           id={subject?.id}
           courseId={parseInt(params.courseId)}
           semesterId={parseInt(params.semesterId)}
+          credits={subject?.credits}
           name={subject?.name}
           abbr={subject?.abbr}
           code={subject?.code}
+          subjectType={subject?.subjectType}
         />
       </Card>
     </Flex>

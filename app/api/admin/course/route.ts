@@ -32,7 +32,14 @@ export async function POST(request: NextRequest) {
         abbr: body.abbr,
         duration: body.duration,
         description: body.description,
-        course_outcome: body.course_outcome,
+        programOutcome: body.programOutcome,
+        departmentalStrength: body.departmentalStrength,
+        aboutFacility: body.aboutFacility,
+        eligibilty: body.eligibilty,
+        significance: body.significance,
+        vision: body.vision,
+        mission: body.mission,
+        technicalActivities: body.technicalActivities,
       },
     });
 

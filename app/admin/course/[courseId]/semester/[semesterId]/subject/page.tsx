@@ -1,14 +1,13 @@
 "use client";
-import { Button, Flex, Table } from "@radix-ui/themes";
 import AddNewButton from "@/app/admin/components/AddNewButton";
 import Card from "@/app/admin/components/Card";
 import HeadingCard from "@/app/admin/components/HeadingCard";
 import TableActions from "@/app/admin/components/TableActions";
-import { useEffect, useState } from "react";
 import { Subject } from "@prisma/client";
+import { Flex, Table } from "@radix-ui/themes";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 interface Props {
   params: {
@@ -33,6 +32,13 @@ const SubjectPage = ({ params }: Props) => {
     }
   };
 
+  const subjectTypeMapper = {
+    core_subject: "Core Subject",
+    ability_enhancement_skill_course: "Ability Enhancement Skill Course",
+    core_subject_practical: "Core Subject Practical",
+    ability_enhancement_skill_practical: "Ability Enhancement Skill Practical",
+  };
+
   useEffect(() => {
     getAllSubjects();
   }, []);
@@ -54,6 +60,7 @@ const SubjectPage = ({ params }: Props) => {
                 <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Abbreviation</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Subject Code</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Subject Type</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
               </Table.Row>
             </Table.Header>
@@ -65,6 +72,9 @@ const SubjectPage = ({ params }: Props) => {
                   <Table.Cell>{subject.name}</Table.Cell>
                   <Table.Cell>{subject.abbr}</Table.Cell>
                   <Table.Cell>{subject.code}</Table.Cell>
+                  <Table.Cell>
+                    {subjectTypeMapper[subject?.subjectType || "core_subject"]}
+                  </Table.Cell>
                   <Table.Cell>
                     <TableActions
                       editLink={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/edit/${subject.id}`}

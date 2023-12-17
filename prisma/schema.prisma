@@ -39,8 +39,17 @@ model Course {
   name      String
   abbr      String
   duration  Int // years
+
   description String? @db.Text
-  course_outcome String? @db.Text
+  programOutcome String? @db.Text
+  departmentalStrength String? @db.Text
+  aboutFacility String? @db.Text
+  eligibilty String? @db.Text
+  significance String? @db.Text
+  vision String? @db.Text
+  mission String? @db.Text
+  technicalActivities String? @db.Text
+
   semesters Semester[]
 
   status     Boolean  @default(true)
@@ -67,10 +76,19 @@ model Subject {
   name       String
   abbr       String
   code       String   @unique
+  subjectType  SubjectType?
+  credits    Int
   semesterId Int
   semester   Semester @relation(fields: [semesterId], references: [id])
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+}
+
+enum SubjectType {
+  core_subject
+  core_subject_practical
+  ability_enhancement_skill_course
+  ability_enhancement_skill_practical
 }

@@ -4,11 +4,16 @@ import { courseSchema } from "@/app/validationSchemas";
 import { Button, Flex, Text, TextField } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
+import "react-quill/dist/quill.snow.css";
+import "@/app/styles/ReactQuillStyle.css";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface Props {
   id?: number;
@@ -16,16 +21,30 @@ interface Props {
   abbr?: string;
   duration?: number;
   description?: string;
-  course_outcome?: string;
+  programOutcome?: string;
+  departmentalStrength?: string;
+  aboutFacility?: string;
+  eligibilty?: string;
+  significance?: string;
+  vision?: string;
+  mission?: string;
+  technicalActivities?: string;
 }
 
 const Form = ({
   id,
   abbr,
-  course_outcome,
+  programOutcome,
   description,
   duration,
   name,
+  departmentalStrength,
+  aboutFacility,
+  eligibilty,
+  significance,
+  vision,
+  mission,
+  technicalActivities,
 }: Props) => {
   useEffect(() => {
     setCourseDetails({
@@ -33,9 +52,29 @@ const Form = ({
       abbr: abbr || "",
       duration: duration || 0,
       description: description || "",
-      course_outcome: course_outcome || "",
+      programOutcome: programOutcome || "",
+      departmentalStrength: departmentalStrength || "",
+      aboutFacility: aboutFacility || "",
+      eligibilty: eligibilty || "",
+      significance: significance || "",
+      vision: vision || "",
+      mission: mission || "",
+      technicalActivities: technicalActivities || "",
     });
-  }, [name, abbr, duration, description, course_outcome]);
+  }, [
+    name,
+    abbr,
+    duration,
+    description,
+    programOutcome,
+    departmentalStrength,
+    aboutFacility,
+    eligibilty,
+    significance,
+    vision,
+    mission,
+    technicalActivities,
+  ]);
 
   const router = useRouter();
 
@@ -45,12 +84,34 @@ const Form = ({
     duration: "",
   });
 
+  // const [courseDetails, setCourseDetails] = useState({
+  //   name: "",
+  //   abbr: "",
+  //   duration: 0,
+  //   description: "",
+  //   programOutcome: "",
+  //   departmentalStrength: "",
+  //   aboutFacility: "",
+  //   eligibilty: "",
+  //   significance: "",
+  //   vision: "",
+  //   mission: "",
+  //   technicalActivities: "",
+  // });
+
   const [courseDetails, setCourseDetails] = useState({
     name: "",
     abbr: "",
     duration: 0,
     description: "",
-    course_outcome: "",
+    programOutcome: "",
+    departmentalStrength: "",
+    aboutFacility: "",
+    eligibilty: "",
+    significance: "",
+    vision: "",
+    mission: "",
+    technicalActivities: "",
   });
 
   const handleSave = async () => {
@@ -122,7 +183,7 @@ const Form = ({
     <Flex className="w-full h-full px-10 py-20" direction={"column"} gap={"5"}>
       <Flex className="w-full" gap={"4"} align={"end"}>
         {/* course name */}
-        <Flex direction={"column"} className="w-1/3">
+        <Flex direction={"column"} className="w-1/3" gap={"1"}>
           <Text className="text-xs text-slate-400">Name</Text>
           <Text className="text-xs text-red-400">{errors.name}</Text>
           <TextField.Root>
@@ -137,7 +198,7 @@ const Form = ({
         </Flex>
 
         {/* Course Abbreviation */}
-        <Flex direction={"column"} className="w-1/3">
+        <Flex direction={"column"} className="w-1/3" gap={"1"}>
           <Text className="text-xs text-slate-400">Abbreviation</Text>
           <Text className="text-xs text-red-400">{errors.abbr}</Text>
           <TextField.Root>
@@ -151,13 +212,13 @@ const Form = ({
         </Flex>
 
         {/* Course Duration */}
-        <Flex direction={"column"} className="w-1/3">
+        <Flex direction={"column"} className="w-1/3" gap={"1"}>
           <Text className="text-xs text-slate-400">Duration (Years)</Text>
           <Text className="text-xs text-red-400">{errors.duration}</Text>
           <TextField.Root>
             <TextField.Input
-              value={courseDetails.duration}
               type="number"
+              value={courseDetails.duration}
               onChange={(e) =>
                 setCourseDetails({
                   ...courseDetails,
@@ -169,24 +230,147 @@ const Form = ({
         </Flex>
       </Flex>
 
-      <Flex gap={"4"}>
-        <Flex className="w-1/2" direction={"column"}>
-          <Text className="text-xs text-slate-400">Course Outcome</Text>
-          <SimpleMDE
+      <Flex gap={"4"} mb={"9"}>
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">Program Outcome</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full"
+            value={courseDetails.programOutcome}
             onChange={(value) =>
-              setCourseDetails({ ...courseDetails, course_outcome: value })
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                programOutcome: value,
+              }))
             }
-            value={courseDetails.course_outcome}
           />
         </Flex>
 
-        <Flex className="w-1/2" direction={"column"}>
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
           <Text className="text-xs text-slate-400">Description</Text>
-          <SimpleMDE
-            onChange={(value) =>
-              setCourseDetails({ ...courseDetails, description: value })
-            }
+          <ReactQuill
+            theme="snow"
+            className="h-full w-full"
             value={courseDetails.description}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                description: value,
+              }))
+            }
+          />
+        </Flex>
+      </Flex>
+
+      <Flex gap={"4"} mb={"9"}>
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">Departmental Strength</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full"
+            value={courseDetails.departmentalStrength}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                departmentalStrength: value,
+              }))
+            }
+          />
+        </Flex>
+
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">About Our Facility</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full w-full"
+            value={courseDetails.aboutFacility}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                aboutFacility: value,
+              }))
+            }
+          />
+        </Flex>
+      </Flex>
+
+      <Flex gap={"4"} mb={"9"}>
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">Eligibilty</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full"
+            value={courseDetails.eligibilty}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                eligibilty: value,
+              }))
+            }
+          />
+        </Flex>
+
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">Significance</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full w-full"
+            value={courseDetails.significance}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                significance: value,
+              }))
+            }
+          />
+        </Flex>
+      </Flex>
+
+      <Flex gap={"4"} mb={"9"}>
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">Mission</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full"
+            value={courseDetails.mission}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                mission: value,
+              }))
+            }
+          />
+        </Flex>
+
+        <Flex className="w-1/2" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">Vision</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full w-full"
+            value={courseDetails.vision}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                vision: value,
+              }))
+            }
+          />
+        </Flex>
+      </Flex>
+
+      <Flex gap={"4"} mb={"9"}>
+        <Flex className="w-full" direction={"column"} gap={"2"}>
+          <Text className="text-xs text-slate-400">Technical Activities</Text>
+          <ReactQuill
+            theme="snow"
+            className="h-full"
+            value={courseDetails.technicalActivities}
+            onChange={(value) =>
+              setCourseDetails((prevDetails) => ({
+                ...prevDetails,
+                technicalActivities: value,
+              }))
+            }
           />
         </Flex>
       </Flex>
@@ -195,7 +379,7 @@ const Form = ({
         <Flex className="w-1/3" mb={"9"} gap={"2"}>
           {!id && (
             <Button onClick={() => handleSave()} className="w-1/2">
-              Submit
+              Save
             </Button>
           )}
           {id && (
