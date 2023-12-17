@@ -8,6 +8,16 @@ export async function GET(
 ) {
   try {
     const course = await prisma.course.findUnique({
+      include: {
+        semesters: {
+          include: {
+            subjects: true,
+          },
+          orderBy: {
+            semNumber: "asc",
+          },
+        },
+      },
       where: {
         id: parseInt(params.id),
       },

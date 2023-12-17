@@ -1,14 +1,14 @@
 {
+  "/api/admin/course/route": "app/api/admin/course/route.js",
   "/api/admin/subject/route": "app/api/admin/subject/route.js",
   "/api/admin/subject/[id]/route": "app/api/admin/subject/[id]/route.js",
-  "/api/admin/course/route": "app/api/admin/course/route.js",
   "/api/admin/course/[id]/route": "app/api/admin/course/[id]/route.js",
-  "/admin/course/[courseId]/semester/page": "app/admin/course/[courseId]/semester/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/course/[courseId]/semester/[semesterId]/subject/page": "app/admin/course/[courseId]/semester/[semesterId]/subject/page.js",
-  "/admin/course/[courseId]/semester/[semesterId]/subject/edit/[id]/page": "app/admin/course/[courseId]/semester/[semesterId]/subject/edit/[id]/page.js",
+  "/api/admin/semester/route": "app/api/admin/semester/route.js",
   "/admin/course/[courseId]/semester/edit/[id]/page": "app/admin/course/[courseId]/semester/edit/[id]/page.js",
-  "/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page": "app/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page.js",
   "/admin/course/page": "app/admin/course/page.js",
-  "/admin/course/view/[id]/page": "app/admin/course/view/[id]/page.js"
+  "/admin/course/[courseId]/semester/[semesterId]/subject/page": "app/admin/course/[courseId]/semester/[semesterId]/subject/page.js",
+  "/admin/course/view/[id]/page": "app/admin/course/view/[id]/page.js",
+  "/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page": "app/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page.js",
+  "/admin/course/[courseId]/semester/page": "app/admin/course/[courseId]/semester/page.js",
+  "/admin/course/[courseId]/semester/[semesterId]/subject/edit/[id]/page": "app/admin/course/[courseId]/semester/[semesterId]/subject/edit/[id]/page.js"
 }

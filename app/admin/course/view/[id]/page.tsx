@@ -10,6 +10,9 @@ import { Course } from "@prisma/client";
 import toast from "react-hot-toast";
 import FormattedHTML from "@/app/components/FormattedHTML";
 import Seperator from "@/app/components/Seperator";
+import { DetailedCourse } from "@/app/admin/interfaces";
+import SemesterContainer from "./SemesterContainer";
+import { courseSchema } from "@/app/validationSchemas";
 
 interface Props {
   params: {
@@ -18,7 +21,7 @@ interface Props {
 }
 
 const EditCoursePage = ({ params }: Props) => {
-  const [course, setCourse] = useState<Course>();
+  const [course, setCourse] = useState<DetailedCourse>();
 
   const getCourse = async () => {
     try {
@@ -41,7 +44,7 @@ const EditCoursePage = ({ params }: Props) => {
   return (
     <Flex direction={"column"} className="w-full" gap={"2"}>
       <HeadingCard title={course?.name || ""}></HeadingCard>
-      <Card className="h-full p-10 flex-col pt-20">
+      <Card className="h-full p-10 flex-col pt-20 overflow-hidden overflow-y-scroll">
         <Flex className="p-10" direction={"column"} gap={"9"} align={"center"}>
           <Flex justify={"between"} className="px-10 w-2/3">
             <Flex direction={"column"}>
@@ -82,6 +85,23 @@ const EditCoursePage = ({ params }: Props) => {
             <div>
               <FormattedHTML value={course?.course_outcome || ""} />
             </div>
+          </Flex>
+
+          <Flex className="w-2/3">
+            <Seperator className="w-full" />
+          </Flex>
+
+          <Flex direction={"column"} className="w-2/3" gap={"2"}>
+            <Text className="text-slate-500 text-xs">Semesters</Text>
+            <Flex
+              className="p-2 w-[60rem] bg-slate-100 rounded-lg"
+              gap={"2"}
+              direction={"column"}
+            >
+              {course?.semesters.map((sem) => (
+                <SemesterContainer semester={sem} key={sem.id} />
+              ))}
+            </Flex>
           </Flex>
         </Flex>
       </Card>

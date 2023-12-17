@@ -10,7 +10,7 @@ interface Props {
 const HeadingCard = ({ title }: Props) => {
   return (
     <Flex
-      className="border rounded-lg bg-white shadow-sm w-full h-20"
+      className="border rounded-lg bg-white shadow-sm w-full min-h-[5rem]"
       align={"center"}
       gap={"5"}
       pl={"5"}
