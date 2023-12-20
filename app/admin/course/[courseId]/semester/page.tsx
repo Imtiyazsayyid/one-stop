@@ -10,6 +10,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
+import usePagination from "@/app/hooks/usePagination";
+import Pagination from "@/app/admin/components/Pagination";
 
 interface Props {
   params: {
@@ -18,8 +20,15 @@ interface Props {
 }
 
 const SemesterPage = ({ params }: Props) => {
-  const [semesters, setSemesters] = useState<Semester[]>();
+  const [semesters, setSemesters] = useState<Semester[]>([]);
   const router = useRouter();
+
+  const {
+    currentPage,
+    currentItems: currentSemesters,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(semesters, 5);
 
   const getAllSemesters = async () => {
     const res = await axios.get("/api/admin/semester", {
@@ -60,7 +69,7 @@ const SemesterPage = ({ params }: Props) => {
             </Table.Header>
 
             <Table.Body>
-              {semesters?.map((semester, index) => (
+              {currentSemesters?.map((semester, index) => (
                 <Table.Row key={index} align={"center"}>
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>Semester {semester.semNumber}</Table.Cell>
@@ -92,6 +101,11 @@ const SemesterPage = ({ params }: Props) => {
               ))}
             </Table.Body>
           </Table.Root>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
         </Flex>
       </Card>
     </Flex>

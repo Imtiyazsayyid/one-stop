@@ -10,10 +10,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import Pagination from "@/app/components/Pagination";
+import usePagination from "@/app/hooks/usePagination";
+import Pagination from "../components/Pagination";
 
 const CoursePage = () => {
-  const [courses, setCourses] = useState<Course[]>();
+  const [courses, setCourses] = useState<Course[]>([]);
   const router = useRouter();
 
   const getAllCourses = async () => {
@@ -24,6 +25,13 @@ const CoursePage = () => {
       toast.error("Server Error");
     }
   };
+
+  const {
+    currentPage,
+    currentItems: currentCourses,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(courses, 5);
 
   useEffect(() => {
     getAllCourses();
@@ -82,6 +90,11 @@ const CoursePage = () => {
               ))}
             </Table.Body>
           </Table.Root>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
         </Flex>
       </Card>
     </Flex>

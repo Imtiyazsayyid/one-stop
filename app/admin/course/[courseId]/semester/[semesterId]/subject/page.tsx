@@ -2,7 +2,9 @@
 import AddNewButton from "@/app/admin/components/AddNewButton";
 import Card from "@/app/admin/components/Card";
 import HeadingCard from "@/app/admin/components/HeadingCard";
+import Pagination from "@/app/admin/components/Pagination";
 import TableActions from "@/app/admin/components/TableActions";
+import usePagination from "@/app/hooks/usePagination";
 import { Subject } from "@prisma/client";
 import { Flex, Table } from "@radix-ui/themes";
 import axios from "axios";
@@ -17,7 +19,14 @@ interface Props {
 }
 
 const SubjectPage = ({ params }: Props) => {
-  const [subjects, setSubjects] = useState<Subject[]>();
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+
+  const {
+    currentPage,
+    currentItems: currentSubjects,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(subjects, 5);
 
   const getAllSubjects = async () => {
     const res = await axios.get("/api/admin/subject", {
@@ -66,7 +75,7 @@ const SubjectPage = ({ params }: Props) => {
             </Table.Header>
 
             <Table.Body>
-              {subjects?.map((subject, index) => (
+              {currentSubjects?.map((subject, index) => (
                 <Table.Row key={index} align={"center"}>
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>{subject.name}</Table.Cell>
@@ -87,6 +96,11 @@ const SubjectPage = ({ params }: Props) => {
               ))}
             </Table.Body>
           </Table.Root>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
         </Flex>
       </Card>
     </Flex>

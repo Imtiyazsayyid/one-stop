@@ -1,74 +1,40 @@
 {
   "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/admin/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/page.js"
+    ],
     "/admin/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin/layout.js"
-    ],
-    "/admin/course/[courseId]/semester/[semesterId]/subject/new/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/course/[courseId]/semester/[semesterId]/subject/new/page.js"
-    ],
-    "/admin/course/[courseId]/semester/[semesterId]/subject/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/course/[courseId]/semester/[semesterId]/subject/page.js"
     ],
     "/admin/course/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin/course/page.js"
     ],
-    "/admin/course/new/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/admin/course/new/page.css",
-      "static/chunks/app/admin/course/new/page.js"
-    ],
-    "/admin/course/edit/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/admin/course/edit/[id]/page.css",
-      "static/chunks/app/admin/course/edit/[id]/page.js"
-    ],
-    "/admin/course/view/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/course/view/[id]/page.js"
-    ],
     "/admin/course/[courseId]/semester/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin/course/[courseId]/semester/page.js"
     ],
-    "/admin/course/[courseId]/semester/new/page": [
+    "/admin/course/[courseId]/semester/[semesterId]/subject/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/admin/course/[courseId]/semester/new/page.css",
-      "static/chunks/app/admin/course/[courseId]/semester/new/page.js"
-    ],
-    "/admin/course/[courseId]/semester/edit/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/admin/course/[courseId]/semester/edit/[id]/page.css",
-      "static/chunks/app/admin/course/[courseId]/semester/edit/[id]/page.js"
-    ],
-    "/admin/course/[courseId]/semester/[semesterId]/subject/edit/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/course/[courseId]/semester/[semesterId]/subject/edit/[id]/page.js"
-    ],
-    "/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page.js"
+      "static/chunks/app/admin/course/[courseId]/semester/[semesterId]/subject/page.js"
     ]
   }
 }
