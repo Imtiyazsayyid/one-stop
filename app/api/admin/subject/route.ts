@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const semesterId = getSearchParam(request, "semesterId");
   const searchText = getSearchParam(request, "searchText");
+  const subjectType = getSearchParam(request, "subjectType");
 
   if (!semesterId) {
     return NextResponse.json({
@@ -23,6 +24,13 @@ export async function GET(request: NextRequest) {
         name: {
           contains: searchText,
         },
+      };
+    }
+
+    if (subjectType) {
+      where = {
+        ...where,
+        subjectType,
       };
     }
 

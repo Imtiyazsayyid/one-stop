@@ -1,13 +1,14 @@
 "use client";
 import AddNewButton from "@/app/admin/components/AddNewButton";
 import Card from "@/app/admin/components/Card";
+import ClearFiltersButton from "@/app/admin/components/ClearFiltersButton";
 import HeadingCard from "@/app/admin/components/HeadingCard";
 import Pagination from "@/app/admin/components/Pagination";
 import TableActions from "@/app/admin/components/TableActions";
 import SearchBar from "@/app/components/SearchBar";
 import usePagination from "@/app/hooks/usePagination";
-import { Subject } from "@prisma/client";
-import { Flex, Table } from "@radix-ui/themes";
+import { Subject, SubjectType } from "@prisma/client";
+import { Flex, Select, Table } from "@radix-ui/themes";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -19,22 +20,30 @@ interface Props {
   };
 }
 
+interface Filters {
+  subjectType: SubjectType | "";
+}
+
 const SubjectPage = ({ params }: Props) => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [filters, setFilters] = useState<Filters>({
+    subjectType: "",
+  });
 
   const {
     currentPage,
     currentItems: currentSubjects,
     setCurrentPage,
     totalPages,
-  } = usePagination(subjects, 5);
+  } = usePagination(subjects, 8);
 
   const getAllSubjects = async () => {
     const res = await axios.get("/api/admin/subject", {
       params: {
         semesterId: params.semesterId,
         searchText,
+        ...filters,
       },
     });
     if (res.data.status) {
@@ -42,6 +51,12 @@ const SubjectPage = ({ params }: Props) => {
     } else {
       toast.error("Server Error");
     }
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      subjectType: "",
+    });
   };
 
   const subjectTypeMapper = {
@@ -53,7 +68,7 @@ const SubjectPage = ({ params }: Props) => {
 
   useEffect(() => {
     getAllSubjects();
-  }, [searchText]);
+  }, [searchText, filters]);
 
   return (
     <Flex className="w-full" direction={"column"} gap={"2"}>
@@ -66,9 +81,43 @@ const SubjectPage = ({ params }: Props) => {
               setSearchText={setSearchText}
               placeholder="Find Subject"
             />
-            <AddNewButton
-              link={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/new`}
-            />
+            <Flex gap={"2"}>
+              <Select.Root
+                value={filters.subjectType}
+                onValueChange={(val) =>
+                  setFilters({
+                    ...filters,
+                    subjectType: val as SubjectType,
+                  })
+                }
+              >
+                <Select.Trigger
+                  className="w-72 focus:outline-none hover:outline-none"
+                  placeholder="Select Subject Type"
+                  color="violet"
+                  variant="soft"
+                />
+                <Select.Content position="popper">
+                  <Select.Item value="core_subject">Core Subject</Select.Item>
+                  <Select.Item value="core_subject_practical">
+                    Core Subject Practical
+                  </Select.Item>
+                  <Select.Item value="ability_enhancement_skill_course">
+                    Ability Enhancement Skill Course
+                  </Select.Item>
+                  <Select.Item value="ability_enhancement_skill_practical">
+                    Ability Enhancement Skill Practical
+                  </Select.Item>
+                </Select.Content>
+              </Select.Root>
+              <ClearFiltersButton
+                filters={filters}
+                resetFilters={resetFilters}
+              />
+              <AddNewButton
+                link={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/new`}
+              />
+            </Flex>
           </Flex>
           <Table.Root variant="surface" className="w-full h-full">
             <Table.Header>
@@ -104,11 +153,13 @@ const SubjectPage = ({ params }: Props) => {
               ))}
             </Table.Body>
           </Table.Root>
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
-          />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={totalPages}
+            />
+          )}
         </Flex>
       </Card>
     </Flex>

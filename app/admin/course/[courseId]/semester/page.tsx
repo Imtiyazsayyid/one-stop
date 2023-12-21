@@ -12,6 +12,7 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import usePagination from "@/app/hooks/usePagination";
 import Pagination from "@/app/admin/components/Pagination";
+import SearchBar from "@/app/components/SearchBar";
 
 interface Props {
   params: {
@@ -21,6 +22,8 @@ interface Props {
 
 const SemesterPage = ({ params }: Props) => {
   const [semesters, setSemesters] = useState<Semester[]>([]);
+  const [searchText, setSearchText] = useState("");
+
   const router = useRouter();
 
   const {
@@ -28,12 +31,13 @@ const SemesterPage = ({ params }: Props) => {
     currentItems: currentSemesters,
     setCurrentPage,
     totalPages,
-  } = usePagination(semesters, 5);
+  } = usePagination(semesters, 8);
 
   const getAllSemesters = async () => {
     const res = await axios.get("/api/admin/semester", {
       params: {
         courseId: params.courseId,
+        searchText,
       },
     });
     if (res.data.status) {
@@ -45,7 +49,7 @@ const SemesterPage = ({ params }: Props) => {
 
   useEffect(() => {
     getAllSemesters();
-  }, []);
+  }, [searchText]);
 
   return (
     <Flex className="w-full" direction={"column"} gap={"2"}>
@@ -101,11 +105,13 @@ const SemesterPage = ({ params }: Props) => {
               ))}
             </Table.Body>
           </Table.Root>
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
-          />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={totalPages}
+            />
+          )}
         </Flex>
       </Card>
     </Flex>

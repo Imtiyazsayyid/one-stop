@@ -12,13 +12,19 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import usePagination from "@/app/hooks/usePagination";
 import Pagination from "../components/Pagination";
+import SearchBar from "@/app/components/SearchBar";
 
 const CoursePage = () => {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [searchText, setSearchText] = useState("");
   const router = useRouter();
 
   const getAllCourses = async () => {
-    const res = await axios.get("/api/admin/course");
+    const res = await axios.get("/api/admin/course", {
+      params: {
+        searchText,
+      },
+    });
     if (res.data.status) {
       setCourses(res.data.data);
     } else {
@@ -35,14 +41,19 @@ const CoursePage = () => {
 
   useEffect(() => {
     getAllCourses();
-  }, []);
+  }, [searchText]);
 
   return (
     <Flex className="w-full" direction={"column"} gap={"2"}>
       <HeadingCard title="Courses" />
       <Card className="h-full">
         <Flex direction={"column"} className="w-full h-full" gap={"2"}>
-          <Flex justify={"end"}>
+          <Flex justify={"between"}>
+            <SearchBar
+              searchText={searchText}
+              setSearchText={setSearchText}
+              placeholder="Find Subject"
+            />
             <AddNewButton link="/admin/course/new" />
           </Flex>
           <Table.Root variant="surface" className="w-full h-full">
@@ -90,11 +101,13 @@ const CoursePage = () => {
               ))}
             </Table.Body>
           </Table.Root>
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={totalPages}
-          />
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalPages={totalPages}
+            />
+          )}
         </Flex>
       </Card>
     </Flex>

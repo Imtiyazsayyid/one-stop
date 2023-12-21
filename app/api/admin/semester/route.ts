@@ -17,19 +17,9 @@ export async function GET(request: NextRequest) {
   try {
     let where = {};
 
-    if (searchText) {
-      where = {
-        ...where,
-        name: {
-          contains: searchText,
-        },
-      };
-    }
-
     const semesters = await prisma.semester.findMany({
       where: {
         courseId: parseInt(courseId),
-        ...where,
       },
       orderBy: {
         semNumber: "asc",

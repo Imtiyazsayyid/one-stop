@@ -5,7 +5,7 @@ const usePagination = <T>(items: T[], itemsPerPage: number) => {
   const [currentItems, setCurrentItems] = useState<T[]>([]);
 
   useEffect(() => {
-    if (items && items.length) {
+    if (items) {
       const startIndex = currentPage * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
       setCurrentItems(items.slice(startIndex, endIndex));
