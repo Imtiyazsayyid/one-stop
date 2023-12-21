@@ -4,6 +4,7 @@ import Card from "@/app/admin/components/Card";
 import HeadingCard from "@/app/admin/components/HeadingCard";
 import Pagination from "@/app/admin/components/Pagination";
 import TableActions from "@/app/admin/components/TableActions";
+import SearchBar from "@/app/components/SearchBar";
 import usePagination from "@/app/hooks/usePagination";
 import { Subject } from "@prisma/client";
 import { Flex, Table } from "@radix-ui/themes";
@@ -20,6 +21,7 @@ interface Props {
 
 const SubjectPage = ({ params }: Props) => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [searchText, setSearchText] = useState("");
 
   const {
     currentPage,
@@ -32,6 +34,7 @@ const SubjectPage = ({ params }: Props) => {
     const res = await axios.get("/api/admin/subject", {
       params: {
         semesterId: params.semesterId,
+        searchText,
       },
     });
     if (res.data.status) {
@@ -50,14 +53,19 @@ const SubjectPage = ({ params }: Props) => {
 
   useEffect(() => {
     getAllSubjects();
-  }, []);
+  }, [searchText]);
 
   return (
     <Flex className="w-full" direction={"column"} gap={"2"}>
       <HeadingCard title="Subjects" />
       <Card className="h-full">
         <Flex direction={"column"} className="w-full h-full" gap={"2"}>
-          <Flex justify={"end"}>
+          <Flex justify={"between"}>
+            <SearchBar
+              searchText={searchText}
+              setSearchText={setSearchText}
+              placeholder="Find Subject"
+            />
             <AddNewButton
               link={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/new`}
             />

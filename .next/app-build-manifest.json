@@ -35,6 +35,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin/course/[courseId]/semester/[semesterId]/subject/page.js"
+    ],
+    "/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/course/[courseId]/semester/[semesterId]/subject/view/[id]/page.js"
+    ],
+    "/admin/course/view/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/course/view/[id]/page.js"
     ]
   }
 }

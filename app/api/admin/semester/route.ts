@@ -1,9 +1,11 @@
+import getSearchParam from "@/app/admin/helpers/searchParams";
 import { semesterSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const courseId = request.nextUrl.searchParams.get("courseId");
+  const courseId = getSearchParam(request, "courseId");
+  const searchText = getSearchParam(request, "searchText");
 
   if (!courseId) {
     return NextResponse.json({
@@ -13,9 +15,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    let where = {};
+
+    if (searchText) {
+      where = {
+        ...where,
+        name: {
+          contains: searchText,
+        },
+      };
+    }
+
     const semesters = await prisma.semester.findMany({
       where: {
         courseId: parseInt(courseId),
+        ...where,
       },
       orderBy: {
         semNumber: "asc",

@@ -1,10 +1,28 @@
+import getSearchParam from "@/app/admin/helpers/searchParams";
 import { courseSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  const searchText = getSearchParam(request, "searchText");
+
   try {
-    const courses = await prisma.course.findMany();
+    let where = {};
+
+    if (searchText) {
+      where = {
+        ...where,
+        name: {
+          contains: searchText,
+        },
+      };
+    }
+
+    const courses = await prisma.course.findMany({
+      where: {
+        ...where,
+      },
+    });
     return NextResponse.json({ data: courses, status: true });
   } catch (error) {
     return NextResponse.json({

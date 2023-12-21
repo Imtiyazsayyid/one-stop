@@ -1,11 +1,10 @@
 {
   "/page": "app/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/api/admin/semester/route": "app/api/admin/semester/route.js",
-  "/api/admin/course/route": "app/api/admin/course/route.js",
   "/api/admin/subject/route": "app/api/admin/subject/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/admin/course/[courseId]/semester/page": "app/admin/course/[courseId]/semester/page.js",
+  "/admin/course/view/[id]/page": "app/admin/course/view/[id]/page.js",
   "/admin/course/[courseId]/semester/[semesterId]/subject/page": "app/admin/course/[courseId]/semester/[semesterId]/subject/page.js",
   "/admin/course/page": "app/admin/course/page.js"
 }
