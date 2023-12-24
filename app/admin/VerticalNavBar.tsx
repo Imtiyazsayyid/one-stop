@@ -23,6 +23,11 @@ const Links = [
     link: "/admin/course",
     icon: <RiGraduationCapFill className="text-xl " />,
   },
+  {
+    label: "Teachers",
+    link: "/admin/teacher",
+    icon: <PiChalkboardTeacherFill className="text-xl " />,
+  },
 ];
 
 const VerticalNavBar = () => {

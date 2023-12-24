@@ -196,7 +196,7 @@ const Form = ({
           <Text className="text-xs text-red-400">{errors.credits}</Text>
           <TextField.Root>
             <TextField.Input
-              value={subjectDetails.credits}
+              defaultValue={subjectDetails.credits}
               type="number"
               onChange={(e) =>
                 setSubjectDetails({

@@ -1,5 +1,32 @@
 import z from "zod";
 
+const allowedGenders = ["male", "female", "other"];
+
+const user = z.object({
+  firstName: z
+    .string({ required_error: "First Name is required" })
+    .min(2, "First Name is too short")
+    .max(100, "First Name is too long"),
+  lastName: z
+    .string({ required_error: "Last Name is required" })
+    .min(2, "Last Name is too short")
+    .max(100, "Last Name is too long"),
+  email: z.string({ required_error: "Email is required" }).email(),
+  password: z
+    .string({ required_error: "Password is required" })
+    .min(3, "Password is too short")
+    .max(45, "Password is too long"),
+  gender: z
+    .string({ required_error: "Gender is required" })
+    .refine((data) => allowedGenders.includes(data), {
+      message: "Invalid gender",
+    }),
+  userTypeId: z.number({
+    required_error: "User Type is required",
+    invalid_type_error: "User Type is required",
+  }),
+});
+
 const courseSchema = z.object({
   name: z
     .string({ required_error: "Course Name is required" })
@@ -45,25 +72,33 @@ const subjectSchema = z.object({
   }),
 });
 
-const gradeSchema = z.object({
-  gradeName: z
-    .string({ required_error: "Grade Name is required" })
-    .min(3, "Grade Name is too short")
-    .max(45, "Grade Name is too long"),
-});
-
 const teacherSchema = z.object({
-  teacherName: z
-    .string({ required_error: "Teacher Name is required" })
-    .min(3, "Teacher Name is too short")
-    .max(45, "Teacher Name is too long"),
-  teacherEmail: z
-    .string({ required_error: "Teacher Email is required" })
-    .email(),
-  teacherPassword: z
-    .string({ required_error: "Teacher Password is required" })
-    .min(3, "Teacher Password is too short")
-    .max(45, "Teacher Password is too long"),
+  firstName: z
+    .string({ required_error: "First Name is required" })
+    .min(2, "First Name is too short")
+    .max(100, "First Name is too long"),
+  lastName: z
+    .string({ required_error: "Last Name is required" })
+    .min(2, "Last Name is too short")
+    .max(100, "Last Name is too long"),
+  email: z.string({ required_error: "Email is required" }).email(),
+  password: z
+    .string({ required_error: "Password is required" })
+    .min(3, "Password is too short")
+    .max(45, "Password is too long"),
+  gender: z
+    .string({ required_error: "Gender is required" })
+    .refine((data) => allowedGenders.includes(data), {
+      message: "Invalid gender",
+    }),
+  userTypeId: z.number({
+    required_error: "User Type is required",
+    invalid_type_error: "User Type is required",
+  }),
+  roleId: z.number({
+    required_error: "Teacher Role is required",
+    invalid_type_error: "Teacher Role is required",
+  }),
 });
 
 const lectureGroupSchema = z.object({
@@ -121,4 +156,4 @@ const studentSchema = z.object({
   }),
 });
 
-export { courseSchema, semesterSchema, subjectSchema };
+export { courseSchema, semesterSchema, subjectSchema, teacherSchema };

@@ -1,4 +1,11 @@
-import { Course, Semester, Subject } from "@prisma/client";
+import {
+  Course,
+  Semester,
+  Subject,
+  Teacher,
+  TeacherRole,
+  User,
+} from "@prisma/client";
 
 export type DetailedSemester = Semester & {
   subjects: Subject[];
@@ -6,4 +13,9 @@ export type DetailedSemester = Semester & {
 
 export type DetailedCourse = Course & {
   semesters: DetailedSemester[];
+};
+
+export type DetailedTeacher = Teacher & {
+  user: User;
+  role: TeacherRole;
 };

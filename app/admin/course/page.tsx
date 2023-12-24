@@ -52,7 +52,7 @@ const CoursePage = () => {
             <SearchBar
               searchText={searchText}
               setSearchText={setSearchText}
-              placeholder="Find Subject"
+              placeholder="Find Course"
             />
             <AddNewButton link="/admin/course/new" />
           </Flex>

@@ -115,7 +115,7 @@ const Form = ({ id, duration, semNumber, courseId }: Props) => {
           <Text className="text-xs text-red-400">{errors.semNumber}</Text>
           <TextField.Root>
             <TextField.Input
-              value={semesterDetails.semNumber}
+              defaultValue={semesterDetails.semNumber}
               size={"2"}
               type="number"
               onChange={(e) =>
@@ -134,7 +134,7 @@ const Form = ({ id, duration, semNumber, courseId }: Props) => {
           <Text className="text-xs text-red-400">{errors.duration}</Text>
           <TextField.Root>
             <TextField.Input
-              value={semesterDetails.duration}
+              defaultValue={semesterDetails.duration}
               type="number"
               onChange={(e) =>
                 setSemesterDetails({

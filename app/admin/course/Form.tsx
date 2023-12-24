@@ -218,7 +218,7 @@ const Form = ({
           <TextField.Root>
             <TextField.Input
               type="number"
-              value={courseDetails.duration}
+              defaultValue={courseDetails.duration}
               onChange={(e) =>
                 setCourseDetails({
                   ...courseDetails,
