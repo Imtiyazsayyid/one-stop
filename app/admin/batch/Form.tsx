@@ -15,6 +15,7 @@ import { DetailedSubject, DetailedTeacher } from "../interfaces";
 import { useRouter } from "next/navigation";
 import moment from "moment";
 import toast from "react-hot-toast";
+import { batchSchema } from "@/app/validationSchemas";
 
 interface Props {
   id?: number;
@@ -163,6 +164,26 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
   };
 
   const handleSave = async () => {
+    setErrors(() => ({
+      fromDate: "",
+      toDate: "",
+      courseId: "",
+    }));
+
+    const validation = batchSchema.safeParse(batchDetails);
+
+    if (!validation.success) {
+      const errorArray = validation.error.errors;
+
+      for (let error of errorArray) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [error.path[0]]: error.message,
+        }));
+      }
+      return;
+    }
+
     const res = await axios.post("/api/admin/batch", {
       ...batchDetails,
       subjectTeacherMap: subjectTeacherMap,
@@ -178,6 +199,25 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
   };
 
   const handleUpdate = async () => {
+    setErrors(() => ({
+      fromDate: "",
+      toDate: "",
+      courseId: "",
+    }));
+
+    const validation = batchSchema.safeParse(batchDetails);
+
+    if (!validation.success) {
+      const errorArray = validation.error.errors;
+
+      for (let error of errorArray) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [error.path[0]]: error.message,
+        }));
+      }
+      return;
+    }
     const res = await axios.put(`/api/admin/batch/${id}`, {
       ...batchDetails,
       subjectTeacherMap: subjectTeacherMap,
@@ -287,10 +327,9 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
           </Flex>
 
           <Flex gap={"1"} direction={"column"} className="w-1/2">
-            <Flex>
-              <Text className="text-xs text-slate-400">To</Text>
-              <Text className="text-xs text-red-400">{errors.toDate}</Text>
-            </Flex>
+            <Text className="text-xs text-slate-400">To</Text>
+            <Text className="text-xs text-red-400">{errors.toDate}</Text>
+
             <Flex className="w-full">
               <DatePicker
                 oneTap
@@ -341,7 +380,6 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
         {/* Semesters */}
         <Flex direction={"column"} className="w-1/3" gap={"1"}>
           <Text className="text-xs text-slate-400">Semesters</Text>
-          <Text className="text-xs text-red-400">{errors.courseId}</Text>
           <CheckPicker
             disabled={batchDetails.courseId ? false : true}
             onChange={(val) => {

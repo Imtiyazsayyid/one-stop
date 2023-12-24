@@ -101,6 +101,20 @@ const teacherSchema = z.object({
   }),
 });
 
+const batchSchema = z.object({
+  fromDate: z
+    .string({ required_error: "From Date Is Required" })
+    .min(1, "From Date Is Required"),
+
+  toDate: z
+    .string({ required_error: "From Date Is Required" })
+    .min(1, "To Date Is Required"),
+  courseId: z.number({
+    required_error: "Course is required",
+    invalid_type_error: "Course is required",
+  }),
+});
+
 const lectureGroupSchema = z.object({
   lectureGroupName: z
     .string({ required_error: "Lecture Group Name is required" })
@@ -156,4 +170,10 @@ const studentSchema = z.object({
   }),
 });
 
-export { courseSchema, semesterSchema, subjectSchema, teacherSchema };
+export {
+  courseSchema,
+  semesterSchema,
+  subjectSchema,
+  teacherSchema,
+  batchSchema,
+};

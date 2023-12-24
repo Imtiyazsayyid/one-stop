@@ -4,6 +4,18 @@
 
 @import "rsuite/dist/rsuite.css";
 
+:root {
+  --rs-primary-100: #e8e8e8;
+  --rs-primary-200: var(--violet-a6);
+  --rs-primary-300: var(--violet-a7);
+  --rs-primary-400: var(--violet-a8);
+  --rs-primary-500: var(--violet-a9);
+  --rs-primary-600: var(--violet-a10);
+  --rs-primary-700: var(--violet-a11);
+  --rs-primary-800: var(--violet-a12);
+  --rs-primary-900: var(--violet-a13);
+}
+
 body {
   font-family: "poppins";
 }
