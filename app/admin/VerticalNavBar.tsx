@@ -8,6 +8,7 @@ import { FaBookOpenReader } from "react-icons/fa6";
 import { PiMedalFill } from "react-icons/pi";
 import { FaUser } from "react-icons/fa6";
 import { PiChalkboardTeacherFill } from "react-icons/pi";
+import { HiSquare2Stack } from "react-icons/hi2";
 import { FaUsers } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { ArrowLeftIcon, Cross1Icon } from "@radix-ui/react-icons";
@@ -27,6 +28,11 @@ const Links = [
     label: "Teachers",
     link: "/admin/teacher",
     icon: <PiChalkboardTeacherFill className="text-xl " />,
+  },
+  {
+    label: "Batches",
+    link: "/admin/batch",
+    icon: <HiSquare2Stack className="text-xl " />,
   },
 ];
 

@@ -37,6 +37,7 @@
     "react-select": "^5.8.0",
     "react-simplemde-editor": "^5.2.0",
     "react-spinners": "^0.13.8",
+    "rsuite": "^5.48.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

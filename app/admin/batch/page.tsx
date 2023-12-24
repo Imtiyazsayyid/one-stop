@@ -1,8 +1,9 @@
 "use client";
 import SearchBar from "@/app/components/SearchBar";
 import usePagination from "@/app/hooks/usePagination";
-import { Avatar, Flex, Table } from "@radix-ui/themes";
+import { Flex, Table } from "@radix-ui/themes";
 import axios from "axios";
+import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -11,21 +12,21 @@ import Card from "../components/Card";
 import HeadingCard from "../components/HeadingCard";
 import Pagination from "../components/Pagination";
 import TableActions from "../components/TableActions";
-import { DetailedTeacher } from "../interfaces";
+import { DetailedBatch } from "../interfaces";
 
-const TeacherPage = () => {
-  const [teachers, setTeachers] = useState<DetailedTeacher[]>([]);
+const BatchPage = () => {
+  const [batches, setBatches] = useState<DetailedBatch[]>([]);
   const [searchText, setSearchText] = useState("");
   const router = useRouter();
 
-  const getAllTeachers = async () => {
-    const res = await axios.get("/api/admin/teacher", {
+  const getAllBatches = async () => {
+    const res = await axios.get("/api/admin/batch", {
       params: {
         searchText,
       },
     });
     if (res.data.status) {
-      setTeachers(res.data.data);
+      setBatches(res.data.data);
     } else {
       toast.error("Server Error");
     }
@@ -33,68 +34,54 @@ const TeacherPage = () => {
 
   const {
     currentPage,
-    currentItems: currentTeachers,
+    currentItems: currentBatches,
     setCurrentPage,
     totalPages,
-  } = usePagination(teachers, 5);
+  } = usePagination(batches, 5);
 
   useEffect(() => {
-    getAllTeachers();
+    getAllBatches();
   }, [searchText]);
 
   return (
     <Flex className="w-full" direction={"column"} gap={"2"}>
-      <HeadingCard title="Teachers" />
+      <HeadingCard title="Batches" />
       <Card className="h-full">
         <Flex direction={"column"} className="w-full h-full" gap={"2"}>
           <Flex justify={"between"}>
             <SearchBar
               searchText={searchText}
               setSearchText={setSearchText}
-              placeholder="Find Teacher"
+              placeholder="Find Batch"
             />
-            <AddNewButton link="/admin/teacher/new" />
+            <AddNewButton link="/admin/batch/new" />
           </Flex>
           <Table.Root variant="surface" className="w-full h-full">
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Profile</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Experience</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Course</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Duration</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                {/* <Table.ColumnHeaderCell>Semesters</Table.ColumnHeaderCell> */}
               </Table.Row>
             </Table.Header>
 
             <Table.Body>
-              {teachers?.map((teacher, index) => (
+              {batches?.map((batch, index) => (
                 <Table.Row key={index} align={"center"}>
                   <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell>{batch.course.name}</Table.Cell>
                   <Table.Cell>
-                    <Avatar
-                      fallback={"?"}
-                      src={teacher.user.profileImg || ""}
-                      radius="full"
-                      className="shadow-md border"
-                    />
+                    {moment(batch.fromDate).format("MMM YYYY")} -{" "}
+                    {moment(batch.toDate).format("MMM YYYY")}
                   </Table.Cell>
-                  <Table.Cell>
-                    {teacher.user.firstName + " " + teacher.user.lastName}
-                  </Table.Cell>
-                  <Table.Cell>{teacher.user.email}</Table.Cell>
-                  <Table.Cell>{teacher.role.name}</Table.Cell>
-                  <Table.Cell>
-                    {teacher.experience ? teacher.experience + " years" : "-"}
-                  </Table.Cell>
+
                   <Table.Cell>
                     <TableActions
-                      editLink={`/admin/teacher/edit/${teacher.id}`}
-                      viewLink={`/admin/teacher/view/${teacher.id}`}
-                      deleteLink={`/api/admin/teacher/${teacher.id}`}
-                      fetchData={getAllTeachers}
+                      editLink={`/admin/batch/edit/${batch.id}`}
+                      viewLink={`/admin/batch/view/${batch.id}`}
+                      deleteLink={`/api/admin/batch/${batch.id}`}
+                      fetchData={getAllBatches}
                     />
                   </Table.Cell>
                 </Table.Row>
@@ -114,4 +101,4 @@ const TeacherPage = () => {
   );
 };
 
-export default TeacherPage;
+export default BatchPage;
