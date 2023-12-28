@@ -58,22 +58,6 @@ export async function PUT(
       })),
     });
 
-    const deletedOldBatchSubjectTeacherMap =
-      await prisma.batchTeacherSubjectMapper.deleteMany({
-        where: {
-          batchId: updatedBatch.id,
-        },
-      });
-
-    const newBatchSubjectTeacherMap =
-      await prisma.batchTeacherSubjectMapper.createMany({
-        data: body.subjectTeacherMap.map(
-          (subjectTeacher: { subjectId: number; teacherId: number }) => ({
-            ...subjectTeacher,
-            batchId: updatedBatch.id,
-          })
-        ),
-      });
     return NextResponse.json({ data: updatedBatch, status: true });
   } catch (error) {
     return NextResponse.json({
@@ -90,13 +74,6 @@ export async function DELETE(
   try {
     const deletedOldBatchSemesters =
       await prisma.batchSemesterMapper.deleteMany({
-        where: {
-          batchId: parseInt(params.id),
-        },
-      });
-
-    const deletedOldBatchSubjectTeacherMap =
-      await prisma.batchTeacherSubjectMapper.deleteMany({
         where: {
           batchId: parseInt(params.id),
         },

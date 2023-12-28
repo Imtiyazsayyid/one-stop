@@ -9,17 +9,24 @@ import {
 import { Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { ReactNode } from "react";
 import toast from "react-hot-toast";
 
 interface Props {
   editLink?: string;
   viewLink?: string;
   deleteLink?: string;
+  editModal?: ReactNode;
   fetchData: () => {};
 }
 
-const TableActions = ({ editLink, viewLink, deleteLink, fetchData }: Props) => {
+const TableActions = ({
+  editLink,
+  viewLink,
+  deleteLink,
+  fetchData,
+  editModal,
+}: Props) => {
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -63,6 +70,7 @@ const TableActions = ({ editLink, viewLink, deleteLink, fetchData }: Props) => {
           <Pencil2Icon />
         </Button>
       )}
+      {editModal}
       {deleteLink && <DeleteConfirmation confirmDelete={handleDelete} />}
     </Flex>
   );

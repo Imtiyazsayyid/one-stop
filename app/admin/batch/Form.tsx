@@ -1,21 +1,14 @@
 "use client";
 
-import {
-  BatchTeacherSubjectMapper,
-  Course,
-  Semester,
-  Subject,
-} from "@prisma/client";
-import { Flex, Select, Text, Button } from "@radix-ui/themes";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { DatePicker } from "rsuite";
-import { CheckPicker } from "rsuite";
-import { DetailedSubject, DetailedTeacher } from "../interfaces";
-import { useRouter } from "next/navigation";
-import moment from "moment";
-import toast from "react-hot-toast";
 import { batchSchema } from "@/app/validationSchemas";
+import { Course, Semester } from "@prisma/client";
+import { Button, Flex, Select, Text } from "@radix-ui/themes";
+import axios from "axios";
+import moment from "moment";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { CheckPicker, DatePicker } from "rsuite";
 
 interface Props {
   id?: number;
@@ -23,17 +16,6 @@ interface Props {
   toDate?: string;
   courseId?: number;
   semestersProp?: number[];
-  // abbr?: string;
-  // duration?: number;
-  // description?: string;
-  // programOutcome?: string;
-  // departmentalStrength?: string;
-  // aboutFacility?: string;
-  // eligibilty?: string;
-  // significance?: string;
-  // vision?: string;
-  // mission?: string;
-  // technicalActivities?: string;
 }
 
 const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
@@ -48,34 +30,16 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
     if (courseId) {
       getAllSemesters(courseId.toString());
     }
-
-    if (semestersProp && semestersProp.length > 0) {
-      getSubjectsBySemester(semestersProp);
-    }
-
-    if (id) {
-      getAllSubjectTeacherMaps();
-    }
   }, [fromDate, toDate, courseId]);
 
   const router = useRouter();
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [semesters, setSemesters] = useState<Semester[]>([]);
-  const [teacher, setTeacher] = useState<DetailedTeacher[]>([]);
-  const [subjects, setSubjects] = useState<DetailedSubject[]>([]);
-  const [subjectTeacherMap, setSubjectTeacherMap] = useState<
-    { teacherId: number; subjectId: number }[]
-  >([]);
 
   const getAllCourses = async () => {
     const res = await axios.get("/api/admin/course");
     setCourses(res.data.data);
-  };
-
-  const getAllTeachers = async () => {
-    const res = await axios.get("/api/admin/teacher");
-    setTeacher(res.data.data);
   };
 
   const getAllSemesters = async (courseId: string) => {
@@ -87,34 +51,8 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
     setSemesters(res.data.data);
   };
 
-  const getAllSubjectTeacherMaps = async () => {
-    const res = await axios.get("/api/admin/teacher-subject-batch", {
-      params: {
-        batchId: id,
-      },
-    });
-
-    setSubjectTeacherMap(
-      res.data.data.map((data: BatchTeacherSubjectMapper) => ({
-        subjectId: data.subjectId,
-        teacherId: data.teacherId,
-      }))
-    );
-  };
-
-  const getSubjectsBySemester = async (semesterIds: number[]) => {
-    const res = await axios.get("/api/admin/subject-by-semesters", {
-      params: {
-        semesterIds: JSON.stringify(semesterIds),
-      },
-    });
-
-    setSubjects(res.data.data);
-  };
-
   useEffect(() => {
     getAllCourses();
-    getAllTeachers();
   }, []);
 
   const [errors, setErrors] = useState({
@@ -129,39 +67,6 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
     courseId: null as number | null,
     semesters: [] as number[],
   });
-
-  const addOrUpdateSubjectTeacherMap = (
-    val: string,
-    subject: DetailedSubject
-  ) => {
-    const index = subjectTeacherMap.findIndex(
-      (item) => item.subjectId === subject.id
-    );
-    if (index !== -1) {
-      const updatedSubjectTeacherMap = [...subjectTeacherMap];
-      updatedSubjectTeacherMap.splice(index, 1);
-      updatedSubjectTeacherMap.push({
-        teacherId: parseInt(val),
-        subjectId: subject.id,
-      });
-
-      setSubjectTeacherMap(updatedSubjectTeacherMap);
-    } else {
-      setSubjectTeacherMap([
-        ...subjectTeacherMap,
-        { teacherId: parseInt(val), subjectId: subject.id },
-      ]);
-    }
-  };
-
-  const getValueFromSubjectTeacherMapBySubjectId = (subjectId: number) => {
-    for (let subject of subjectTeacherMap) {
-      if (subject.subjectId == subjectId) {
-        return subject.teacherId.toString();
-      }
-    }
-    return "";
-  };
 
   const handleSave = async () => {
     setErrors(() => ({
@@ -186,7 +91,6 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
 
     const res = await axios.post("/api/admin/batch", {
       ...batchDetails,
-      subjectTeacherMap: subjectTeacherMap,
     });
 
     if (!res.data.status) {
@@ -220,7 +124,6 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
     }
     const res = await axios.put(`/api/admin/batch/${id}`, {
       ...batchDetails,
-      subjectTeacherMap: subjectTeacherMap,
     });
 
     if (!res.data.status) {
@@ -231,71 +134,6 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
     toast.success("Saved Successfully");
     router.push("/admin/batch");
   };
-
-  // const handleSave = async () => {
-  //   setErrors(() => ({
-  //     name: "",
-  //     abbr: "",
-  //     duration: "",
-  //   }));
-
-  //   const validation = courseSchema.safeParse(courseDetails);
-
-  //   if (!validation.success) {
-  //     const errorArray = validation.error.errors;
-  //     console.log({ errorArray });
-
-  //     for (let error of errorArray) {
-  //       setErrors((prevErrors) => ({
-  //         ...prevErrors,
-  //         [error.path[0]]: error.message,
-  //       }));
-  //     }
-  //     return;
-  //   }
-
-  //   const res = await axios.post("/api/admin/course", courseDetails);
-
-  //   if (!res.data.status) {
-  //     toast.error("Failed To Save");
-  //     return;
-  //   }
-
-  //   toast.success("Saved Successfully");
-  //   router.push("/admin/course");
-  // };
-
-  // const handleUpdate = async () => {
-  //   setErrors(() => ({
-  //     name: "",
-  //     abbr: "",
-  //     duration: "",
-  //   }));
-
-  //   const validation = courseSchema.safeParse(courseDetails);
-
-  //   if (!validation.success) {
-  //     const errorArray = validation.error.errors;
-
-  //     for (let error of errorArray) {
-  //       setErrors((prevErrors) => ({
-  //         ...prevErrors,
-  //         [error.path[0]]: error.message,
-  //       }));
-  //     }
-  //     return;
-  //   }
-
-  //   const res = await axios.put(`/api/admin/course/${id}`, courseDetails);
-
-  //   if (!res.data.status) {
-  //     toast.error("Failed To Save Changes");
-  //     return;
-  //   }
-
-  //   toast.success("Saved Successfully");
-  //   router.push("/admin/course");
-  // };
 
   return (
     <Flex className="w-full h-full px-10 py-20" direction={"column"} gap={"5"}>
@@ -384,7 +222,7 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
             disabled={batchDetails.courseId ? false : true}
             onChange={(val) => {
               setBatchDetails({ ...batchDetails, semesters: val });
-              getSubjectsBySemester(val);
+              // getSubjectsBySemester(val);
             }}
             value={batchDetails.semesters}
             data={
@@ -399,7 +237,7 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
           />
         </Flex>
       </Flex>
-      <Flex className="w-full" direction={"column"} gap={"2"}>
+      {/* <Flex className="w-full" direction={"column"} gap={"2"}>
         <Text className="text-xs text-slate-400">Semesters</Text>
         <Flex
           className="border w-full p-2 bg-slate-50 h-[50vh] overflow-y-scroll"
@@ -435,7 +273,7 @@ const Form = ({ id, fromDate, toDate, courseId, semestersProp }: Props) => {
             </Flex>
           ))}
         </Flex>
-      </Flex>
+      </Flex> */}
 
       <Flex justify={"center"} mt={"9"}>
         <Flex className="w-1/3" mb={"9"} gap={"2"}>

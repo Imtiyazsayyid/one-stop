@@ -2,6 +2,7 @@ import {
   Batch,
   BatchSemesterMapper,
   Course,
+  DivisionTeacherSubjectMapper,
   Semester,
   Subject,
   Teacher,
@@ -29,4 +30,9 @@ export type DetailedBatch = Batch & {
 
 export type DetailedSubject = Subject & {
   semester: Semester;
+};
+
+export type DetailedDivisionSubjectTeacher = DivisionTeacherSubjectMapper & {
+  subject: DetailedSubject;
+  teacher: DetailedTeacher;
 };

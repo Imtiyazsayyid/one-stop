@@ -3,22 +3,33 @@ import { Button } from "@radix-ui/themes";
 import React from "react";
 
 interface Props {
-  filters: {};
+  filters: any;
   resetFilters: () => void;
 }
 
 const ClearFiltersButton = ({ filters, resetFilters }: Props) => {
-  const allFiltersNotEmpty = Object.values(filters).every(
-    (value) => value !== ""
-  );
-  if (allFiltersNotEmpty)
+  let filterExists = false;
+
+  for (const key in filters) {
+    if (Array.isArray(filters[key])) {
+      if (filters[key].length !== 0) {
+        filterExists = true;
+      }
+    } else {
+      if (filters[key] !== "") {
+        filterExists = true;
+      }
+    }
+  }
+
+  if (filterExists) {
     return (
       <Button variant="soft" color="crimson" onClick={resetFilters}>
         <Cross2Icon />
         Clear Filters
       </Button>
     );
-  else {
+  } else {
     return null;
   }
 };

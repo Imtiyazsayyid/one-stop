@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
+import type { Metadata } from "next";
 import "../theme-config.css";
+import "./globals.css";
 // import NavBar from "./admin/NavBar";
 import { Toaster } from "react-hot-toast";
-import GoBack from "./components/GoBack";
 import AuthProvider from "./auth/Provider";
 
 export const metadata: Metadata = {

@@ -7,16 +7,39 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     let where = {};
+    const courseId = getSearchParam(request, "courseId");
+    const dateRange = getSearchParam(request, "dateRange");
 
-    const bacthes = await prisma.batch.findMany({
+    if (courseId) {
+      where = {
+        ...where,
+        courseId: parseInt(courseId),
+      };
+    }
+
+    if (dateRange && JSON.parse(dateRange).length == 2) {
+      const [fromDate, toDate] = JSON.parse(dateRange);
+      where = {
+        ...where,
+        fromDate: {
+          gte: moment(fromDate).toISOString(),
+        },
+        toDate: {
+          lte: moment(toDate).toISOString(),
+        },
+      };
+    }
+
+    const batches = await prisma.batch.findMany({
       include: {
         course: true,
       },
       orderBy: {
         fromDate: "asc",
       },
+      where,
     });
-    return NextResponse.json({ data: bacthes, status: true });
+    return NextResponse.json({ data: batches, status: true });
   } catch (error) {
     return NextResponse.json({
       error: "Error In Getting Semesters",
@@ -50,15 +73,6 @@ export async function POST(request: NextRequest) {
       })),
     });
 
-    const newBatchSubjectTeacherMap =
-      await prisma.batchTeacherSubjectMapper.createMany({
-        data: body.subjectTeacherMap.map(
-          (subjectTeacher: { subjectId: number; teacherId: number }) => ({
-            ...subjectTeacher,
-            batchId: newBatch.id,
-          })
-        ),
-      });
     return NextResponse.json({ data: newBatch, status: true });
   } catch (error) {
     return NextResponse.json({

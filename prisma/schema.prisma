@@ -95,7 +95,8 @@ model Subject {
   semesterId  Int
   semester    Semester     @relation(fields: [semesterId], references: [id])
 
-  batchesAndTeachers BatchTeacherSubjectMapper[]
+  // batchesAndTeachers BatchTeacherSubjectMapper[]
+  divisionTeacherMap DivisionTeacherSubjectMapper[]
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -127,7 +128,8 @@ model Teacher {
   booksOrChapter                String? @db.Text
   professionalMemberships       String? @db.Text
 
-  batchesAndSubjects BatchTeacherSubjectMapper[]
+  // batchesAndSubjects BatchTeacherSubjectMapper[]
+  divisionSubjectMap DivisionTeacherSubjectMapper[]
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -164,20 +166,21 @@ model Batch {
   courseId Int
   course   Course @relation(fields: [courseId], references: [id])
 
-  teachersAndSubjects BatchTeacherSubjectMapper[]
+  // teachersAndSubjects BatchTeacherSubjectMapper[]
   semesters           BatchSemesterMapper[]
   students Student[]
+  divisions Division[]
 }
 
-model BatchTeacherSubjectMapper {
-  id        Int     @id @default(autoincrement())
-  batchId   Int
-  batch     Batch   @relation(fields: [batchId], references: [id])
-  teacherId Int
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
-  subjectId Int
-  subject   Subject @relation(fields: [subjectId], references: [id])
-}
+// model BatchTeacherSubjectMapper {
+//   id        Int     @id @default(autoincrement())
+//   batchId   Int
+//   batch     Batch   @relation(fields: [batchId], references: [id])
+//   teacherId Int
+//   teacher   Teacher @relation(fields: [teacherId], references: [id])
+//   subjectId Int
+//   subject   Subject @relation(fields: [subjectId], references: [id])
+// }
 
 model BatchSemesterMapper {
   id         Int      @id @default(autoincrement())
@@ -185,4 +188,23 @@ model BatchSemesterMapper {
   batch      Batch    @relation(fields: [batchId], references: [id])
   semesterId Int
   semester   Semester @relation(fields: [semesterId], references: [id])
+}
+
+model Division {
+  id         Int      @id @default(autoincrement())
+  name       String
+  batchId    Int
+  batch      Batch    @relation(fields: [batchId], references: [id])
+
+  teacherSubjectMap DivisionTeacherSubjectMapper[]
+}
+
+model DivisionTeacherSubjectMapper {
+  id        Int     @id @default(autoincrement())
+  divisionId   Int
+  division     Division   @relation(fields: [divisionId], references: [id])
+  teacherId Int?
+  teacher   Teacher? @relation(fields: [teacherId], references: [id])
+  subjectId Int
+  subject   Subject @relation(fields: [subjectId], references: [id])
 }

@@ -16,6 +16,10 @@
   --rs-primary-900: var(--violet-a13);
 }
 
+.rs-btn-primary {
+  background-color: var(--violet-a9);
+}
+
 body {
   font-family: "poppins";
 }

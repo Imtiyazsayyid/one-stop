@@ -1,7 +1,7 @@
 "use client";
 import SearchBar from "@/app/components/SearchBar";
 import usePagination from "@/app/hooks/usePagination";
-import { Flex, Table } from "@radix-ui/themes";
+import { Button, Flex, Select, Table } from "@radix-ui/themes";
 import axios from "axios";
 import moment from "moment";
 import { useRouter } from "next/navigation";
@@ -13,20 +13,35 @@ import HeadingCard from "../components/HeadingCard";
 import Pagination from "../components/Pagination";
 import TableActions from "../components/TableActions";
 import { DetailedBatch } from "../interfaces";
+import ClearFiltersButton from "../components/ClearFiltersButton";
+import { Course } from "@prisma/client";
+import { DateRangePicker } from "rsuite";
+import { DateRange } from "react-date-range";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 const BatchPage = () => {
   const [batches, setBatches] = useState<DetailedBatch[]>([]);
-  const [searchText, setSearchText] = useState("");
+  const [courses, setCourses] = useState<Course[]>([]);
   const router = useRouter();
 
   const getAllBatches = async () => {
     const res = await axios.get("/api/admin/batch", {
       params: {
-        searchText,
+        ...filters,
+        dateRange: JSON.stringify(filters.dateRange),
       },
     });
     if (res.data.status) {
       setBatches(res.data.data);
+    } else {
+      toast.error("Server Error");
+    }
+  };
+
+  const getAllCourses = async () => {
+    const res = await axios.get("/api/admin/course");
+    if (res.data.status) {
+      setCourses(res.data.data);
     } else {
       toast.error("Server Error");
     }
@@ -39,22 +54,74 @@ const BatchPage = () => {
     totalPages,
   } = usePagination(batches, 5);
 
+  const [filters, setFilters] = useState({
+    courseId: "",
+    dateRange: [] as Date[] | null,
+  });
+
+  const resetFilters = () => {
+    setFilters({
+      courseId: "",
+      dateRange: [],
+    });
+  };
+
+  const customRenderValue = (value: Date[], formatString: string) => {
+    if (value && value.length === 2) {
+      return `${moment(value[0]).format("DD MMM, YYYY")} to ${moment(
+        value[1]
+      ).format("DD MMM, YYYY")}`;
+    }
+    return "";
+  };
+
   useEffect(() => {
     getAllBatches();
-  }, [searchText]);
+    getAllCourses();
+  }, [filters]);
 
   return (
     <Flex className="w-full" direction={"column"} gap={"2"}>
       <HeadingCard title="Batches" />
       <Card className="h-full">
         <Flex direction={"column"} className="w-full h-full" gap={"2"}>
-          <Flex justify={"between"}>
-            <SearchBar
-              searchText={searchText}
-              setSearchText={setSearchText}
-              placeholder="Find Batch"
-            />
-            <AddNewButton link="/admin/batch/new" />
+          <Flex justify={"end"}>
+            <Flex gap={"2"}>
+              <DateRangePicker
+                value={filters.dateRange as [Date, Date]}
+                format="dd MMM, yyyy"
+                onChange={(val) => setFilters({ ...filters, dateRange: val })}
+                placeholder="Select Date Range"
+                className="w-72"
+                renderValue={customRenderValue}
+                showOneCalendar
+              />
+              <Select.Root
+                onValueChange={(val) =>
+                  setFilters({ ...filters, courseId: val })
+                }
+                value={filters.courseId}
+              >
+                <Select.Trigger
+                  className="w-96 focus:outline-none hover:outline-none"
+                  placeholder="Select Course"
+                  color="violet"
+                  variant="soft"
+                />
+                <Select.Content position="popper">
+                  {courses?.map((course) => (
+                    <Select.Item value={course.id.toString()} key={course.id}>
+                      {course.name}
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Root>
+              <ClearFiltersButton
+                filters={filters}
+                resetFilters={resetFilters}
+              />
+              <AddNewButton link="/admin/batch/new" />
+            </Flex>
           </Flex>
           <Table.Root variant="surface" className="w-full h-full">
             <Table.Header>
@@ -63,6 +130,7 @@ const BatchPage = () => {
                 <Table.ColumnHeaderCell>Course</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Duration</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Divisions</Table.ColumnHeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -83,6 +151,20 @@ const BatchPage = () => {
                       deleteLink={`/api/admin/batch/${batch.id}`}
                       fetchData={getAllBatches}
                     />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Flex className="p-1 shadow-md border w-fit rounded-full">
+                      <Button
+                        variant="soft"
+                        onClick={() =>
+                          router.push(`/admin/batch/${batch.id}/division`)
+                        }
+                        radius="full"
+                        color="green"
+                      >
+                        <ArrowRightIcon />
+                      </Button>
+                    </Flex>
                   </Table.Cell>
                 </Table.Row>
               ))}
