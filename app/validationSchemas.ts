@@ -115,10 +115,22 @@ const batchSchema = z.object({
   }),
 });
 
+const unitSchema = z.object({
+  name: z
+    .string({ required_error: "Unit Name is required" })
+    .min(3, "Unit Name is too short")
+    .max(100, "Unit Name is too long"),
+  number: z.number({
+    required_error: "Unit Number is required",
+    invalid_type_error: "Unit Number is required",
+  }),
+});
+
 export {
   courseSchema,
   semesterSchema,
   subjectSchema,
   teacherSchema,
   batchSchema,
+  unitSchema,
 };

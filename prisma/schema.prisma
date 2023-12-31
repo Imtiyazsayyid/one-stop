@@ -95,12 +95,45 @@ model Subject {
   semesterId  Int
   semester    Semester     @relation(fields: [semesterId], references: [id])
 
-  // batchesAndTeachers BatchTeacherSubjectMapper[]
   divisionTeacherMap DivisionTeacherSubjectMapper[]
+  units              Unit[]
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+}
+
+model Unit {
+  id           Int            @id @default(autoincrement())
+  number       Int
+  name         String
+  description  String?        @db.Text
+  subjectId    Int
+  subject      Subject        @relation(fields: [subjectId], references: [id])
+  unitMaterial UnitMaterial[]
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model UnitMaterial {
+  id     Int              @id @default(autoincrement())
+  type   UnitMaterialType
+  name   String
+  link   String           @db.Text
+  unitId Int
+  unit   Unit             @relation(fields: [unitId], references: [id])
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+enum UnitMaterialType {
+  img
+  video
+  pdf
 }
 
 enum SubjectType {
@@ -128,7 +161,6 @@ model Teacher {
   booksOrChapter                String? @db.Text
   professionalMemberships       String? @db.Text
 
-  // batchesAndSubjects BatchTeacherSubjectMapper[]
   divisionSubjectMap DivisionTeacherSubjectMapper[]
 
   status     Boolean  @default(true)
@@ -147,11 +179,11 @@ model TeacherRole {
 }
 
 model Student {
-  id     Int  @id @default(autoincrement())
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-  batchId   Int
-  batch  Batch @relation(fields: [batchId], references: [id])
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  user    User  @relation(fields: [userId], references: [id])
+  batchId Int
+  batch   Batch @relation(fields: [batchId], references: [id])
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -166,21 +198,10 @@ model Batch {
   courseId Int
   course   Course @relation(fields: [courseId], references: [id])
 
-  // teachersAndSubjects BatchTeacherSubjectMapper[]
-  semesters           BatchSemesterMapper[]
-  students Student[]
+  semesters BatchSemesterMapper[]
+  students  Student[]
   divisions Division[]
 }
-
-// model BatchTeacherSubjectMapper {
-//   id        Int     @id @default(autoincrement())
-//   batchId   Int
-//   batch     Batch   @relation(fields: [batchId], references: [id])
-//   teacherId Int
-//   teacher   Teacher @relation(fields: [teacherId], references: [id])
-//   subjectId Int
-//   subject   Subject @relation(fields: [subjectId], references: [id])
-// }
 
 model BatchSemesterMapper {
   id         Int      @id @default(autoincrement())
@@ -191,20 +212,20 @@ model BatchSemesterMapper {
 }
 
 model Division {
-  id         Int      @id @default(autoincrement())
-  name       String
-  batchId    Int
-  batch      Batch    @relation(fields: [batchId], references: [id])
+  id      Int    @id @default(autoincrement())
+  name    String
+  batchId Int
+  batch   Batch  @relation(fields: [batchId], references: [id])
 
   teacherSubjectMap DivisionTeacherSubjectMapper[]
 }
 
 model DivisionTeacherSubjectMapper {
-  id        Int     @id @default(autoincrement())
-  divisionId   Int
-  division     Division   @relation(fields: [divisionId], references: [id])
-  teacherId Int?
-  teacher   Teacher? @relation(fields: [teacherId], references: [id])
-  subjectId Int
-  subject   Subject @relation(fields: [subjectId], references: [id])
+  id         Int      @id @default(autoincrement())
+  divisionId Int
+  division   Division @relation(fields: [divisionId], references: [id])
+  teacherId  Int?
+  teacher    Teacher? @relation(fields: [teacherId], references: [id])
+  subjectId  Int
+  subject    Subject  @relation(fields: [subjectId], references: [id])
 }

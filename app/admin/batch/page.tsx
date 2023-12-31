@@ -56,7 +56,7 @@ const BatchPage = () => {
 
   const [filters, setFilters] = useState({
     courseId: "",
-    dateRange: [] as Date[] | null,
+    dateRange: [] as Date[] | null | "",
   });
 
   const resetFilters = () => {
@@ -89,8 +89,11 @@ const BatchPage = () => {
             <Flex gap={"2"}>
               <DateRangePicker
                 value={filters.dateRange as [Date, Date]}
+                size="sm"
                 format="dd MMM, yyyy"
-                onChange={(val) => setFilters({ ...filters, dateRange: val })}
+                onChange={(val) =>
+                  setFilters({ ...filters, dateRange: val ? val : "" })
+                }
                 placeholder="Select Date Range"
                 className="w-72"
                 renderValue={customRenderValue}

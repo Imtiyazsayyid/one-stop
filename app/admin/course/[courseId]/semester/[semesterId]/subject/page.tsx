@@ -8,8 +8,10 @@ import TableActions from "@/app/admin/components/TableActions";
 import SearchBar from "@/app/components/SearchBar";
 import usePagination from "@/app/hooks/usePagination";
 import { Subject, SubjectType } from "@prisma/client";
-import { Flex, Select, Table } from "@radix-ui/themes";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { Button, Flex, Select, Table } from "@radix-ui/themes";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -30,6 +32,7 @@ const SubjectPage = ({ params }: Props) => {
   const [filters, setFilters] = useState<Filters>({
     subjectType: "",
   });
+  const router = useRouter();
 
   const {
     currentPage,
@@ -128,6 +131,7 @@ const SubjectPage = ({ params }: Props) => {
                 <Table.ColumnHeaderCell>Subject Code</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Subject Type</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Units</Table.ColumnHeaderCell>
               </Table.Row>
             </Table.Header>
 
@@ -148,6 +152,22 @@ const SubjectPage = ({ params }: Props) => {
                       deleteLink={`/api/admin/subject/${subject.id}`}
                       fetchData={getAllSubjects}
                     />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Flex className="p-1 shadow-md border w-fit rounded-full">
+                      <Button
+                        variant="soft"
+                        onClick={() =>
+                          router.push(
+                            `/admin/course/${params.courseId}/semester/${params.semesterId}/subject/${subject.id}/unit`
+                          )
+                        }
+                        radius="full"
+                        color="green"
+                      >
+                        <ArrowRightIcon />
+                      </Button>
+                    </Flex>
                   </Table.Cell>
                 </Table.Row>
               ))}

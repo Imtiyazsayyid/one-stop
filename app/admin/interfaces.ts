@@ -7,6 +7,8 @@ import {
   Subject,
   Teacher,
   TeacherRole,
+  Unit,
+  UnitMaterial,
   User,
 } from "@prisma/client";
 
@@ -35,4 +37,8 @@ export type DetailedSubject = Subject & {
 export type DetailedDivisionSubjectTeacher = DivisionTeacherSubjectMapper & {
   subject: DetailedSubject;
   teacher: DetailedTeacher;
+};
+
+export type DetailedUnit = Unit & {
+  unitMaterial: UnitMaterial[];
 };

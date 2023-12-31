@@ -24,6 +24,26 @@ body {
   font-family: "poppins";
 }
 
+.rs-btn-sm {
+  background-color: var(--violet-a9);
+  color: white;
+  height: 2rem;
+}
+
+.rs-picker-select-menu .rs-picker-select-menu-items {
+  padding: 0.5rem;
+}
+
+.rs-picker-default .rs-picker-toggle {
+  background-color: var(--violet-a3) !important;
+}
+
+.rs-picker-select-menu-item:hover {
+  background-color: var(--violet-a9) !important;
+  border-radius: 0.5rem;
+  color: white;
+}
+
 .rdrDefinedRangesWrapper {
   display: none;
 }

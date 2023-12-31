@@ -54,9 +54,9 @@ const VerticalNavBar = () => {
 
   const router = useRouter();
   return (
-    <Flex className="w-[25%]">
+    <Flex className="w-[330px]">
       <Cross1Icon
-        className="absolute left-[19%] top-10 cursor-pointer"
+        className="absolute left-[18.7%] top-10 cursor-pointer"
         onClick={() => setActive(false)}
       />
       <Flex

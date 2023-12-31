@@ -16,7 +16,7 @@ const ClearFiltersButton = ({ filters, resetFilters }: Props) => {
         filterExists = true;
       }
     } else {
-      if (filters[key] !== "") {
+      if (filters[key] !== "" || filters[key]) {
         filterExists = true;
       }
     }
