@@ -86,7 +86,13 @@ const ViewUnitPage = ({ params }: Props) => {
             </Text>
           </Flex>
           {imgUnitMaterial.length > 0 && (
-            <Flex className="w-4/5 h-72" direction={"column"} gap={"2"}>
+            <Flex
+              className="w-4/5 h-72"
+              direction={"column"}
+              gap={"5"}
+              align={"center"}
+              mb={"5"}
+            >
               <Heading size="3">Images</Heading>
               <Flex
                 className="border h-full max-w-[1000px] p-3 overflow-hidden overflow-x-scroll rounded-lg bg-slate-50"
@@ -109,7 +115,13 @@ const ViewUnitPage = ({ params }: Props) => {
           )}
 
           {videoUnitMaterial.length > 0 && (
-            <Flex className="w-4/5 h-72" direction={"column"} gap={"2"}>
+            <Flex
+              className="w-4/5 h-72"
+              direction={"column"}
+              align={"center"}
+              gap={"5"}
+              mb={"5"}
+            >
               <Heading size="3">Videos</Heading>
               <Flex
                 className="border h-full max-w-[1000px] p-3 overflow-hidden overflow-x-scroll rounded-lg bg-slate-50"
@@ -139,7 +151,12 @@ const ViewUnitPage = ({ params }: Props) => {
             </Flex>
           )}
           {pdfUnitMaterial.length > 0 && (
-            <Flex className="w-4/5 h-72" direction={"column"} gap={"2"}>
+            <Flex
+              className="w-4/5 h-72"
+              direction={"column"}
+              gap={"5"}
+              align={"center"}
+            >
               <Heading size="3">PDFs</Heading>
               <Flex
                 className="border h-full max-w-[1000px] p-3 overflow-hidden overflow-x-scroll rounded-lg bg-slate-50"
