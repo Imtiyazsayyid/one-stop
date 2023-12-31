@@ -101,6 +101,43 @@ const teacherSchema = z.object({
   }),
 });
 
+const studentSchema = z.object({
+  firstName: z
+    .string({ required_error: "First Name is required" })
+    .min(2, "First Name is too short")
+    .max(100, "First Name is too long"),
+  lastName: z
+    .string({ required_error: "Last Name is required" })
+    .min(2, "Last Name is too short")
+    .max(100, "Last Name is too long"),
+  email: z.string({ required_error: "Email is required" }).email(),
+  password: z
+    .string({ required_error: "Password is required" })
+    .min(3, "Password is too short")
+    .max(45, "Password is too long"),
+  gender: z
+    .string({ required_error: "Gender is required" })
+    .refine((data) => allowedGenders.includes(data), {
+      message: "Invalid gender",
+    }),
+  userTypeId: z.number({
+    required_error: "User Type is required",
+    invalid_type_error: "User Type is required",
+  }),
+  courseId: z.number({
+    required_error: "Course is required",
+    invalid_type_error: "Course is required",
+  }),
+  batchId: z.number({
+    required_error: "Batch is required",
+    invalid_type_error: "Batch is required",
+  }),
+  divisionId: z.number({
+    required_error: "Division is required",
+    invalid_type_error: "Division is required",
+  }),
+});
+
 const batchSchema = z.object({
   fromDate: z
     .string({ required_error: "From Date Is Required" })
@@ -131,6 +168,7 @@ export {
   semesterSchema,
   subjectSchema,
   teacherSchema,
+  studentSchema,
   batchSchema,
   unitSchema,
 };

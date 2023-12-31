@@ -2,8 +2,10 @@ import {
   Batch,
   BatchSemesterMapper,
   Course,
+  Division,
   DivisionTeacherSubjectMapper,
   Semester,
+  Student,
   Subject,
   Teacher,
   TeacherRole,
@@ -25,9 +27,17 @@ export type DetailedTeacher = Teacher & {
   role: TeacherRole;
 };
 
+export type DetailedStudent = Student & {
+  user: User;
+};
+
 export type DetailedBatch = Batch & {
   course: Course;
   semesters: BatchSemesterMapper[];
+};
+
+export type DetailedDivision = Division & {
+  students: Student[];
 };
 
 export type DetailedSubject = Subject & {

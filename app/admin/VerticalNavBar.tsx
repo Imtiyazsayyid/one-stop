@@ -12,6 +12,7 @@ import { HiSquare2Stack } from "react-icons/hi2";
 import { FaUsers } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { ArrowLeftIcon, Cross1Icon } from "@radix-ui/react-icons";
+import { FaUserGraduate } from "react-icons/fa6";
 
 const Links = [
   {
@@ -28,6 +29,11 @@ const Links = [
     label: "Teachers",
     link: "/admin/teacher",
     icon: <PiChalkboardTeacherFill className="text-xl " />,
+  },
+  {
+    label: "Students",
+    link: "/admin/student",
+    icon: <FaUserGraduate className="text-lg" />,
   },
   {
     label: "Batches",

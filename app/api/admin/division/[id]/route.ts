@@ -8,6 +8,9 @@ export async function GET(
 ) {
   try {
     const division = await prisma.division.findUnique({
+      include: {
+        students: true,
+      },
       where: {
         id: parseInt(params.id),
       },
