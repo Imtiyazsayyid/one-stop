@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import NewForm from "./NewForm";
 import EditForm from "./EditForm";
+import Loader from "@/app/components/Loader";
 
 interface Props {
   params: {
@@ -23,6 +24,7 @@ interface Props {
 const DivisionPage = ({ params }: Props) => {
   const [divisions, setDivisions] = useState<Division[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -34,6 +36,7 @@ const DivisionPage = ({ params }: Props) => {
   } = usePagination(divisions, 8);
 
   const getAllDivisions = async () => {
+    setLoading(true);
     const res = await axios.get("/api/admin/division", {
       params: {
         batchId: params.batchId,
@@ -45,6 +48,7 @@ const DivisionPage = ({ params }: Props) => {
     } else {
       toast.error("Server Error");
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -62,63 +66,68 @@ const DivisionPage = ({ params }: Props) => {
               fetchData={getAllDivisions}
             />
           </Flex>
-          <Table.Root variant="surface" className="w-full h-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>
-                  Subject Teachers
-                </Table.ColumnHeaderCell>
-              </Table.Row>
-            </Table.Header>
+          {<Loader isLoading={isLoading} />}
+          {!isLoading && (
+            <>
+              <Table.Root variant="surface" className="w-full h-full">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>
+                      Subject Teachers
+                    </Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
 
-            <Table.Body>
-              {currentDivisions?.map((division, index) => (
-                <Table.Row key={index} align={"center"}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>Division {division.name}</Table.Cell>
-                  <Table.Cell>
-                    <TableActions
-                      editModal={
-                        <EditForm
-                          divisionName={division.name}
-                          divisionId={division.id}
-                          batchId={parseInt(params.batchId)}
+                <Table.Body>
+                  {currentDivisions?.map((division, index) => (
+                    <Table.Row key={index} align={"center"}>
+                      <Table.Cell>{index + 1}</Table.Cell>
+                      <Table.Cell>Division {division.name}</Table.Cell>
+                      <Table.Cell>
+                        <TableActions
+                          editModal={
+                            <EditForm
+                              divisionName={division.name}
+                              divisionId={division.id}
+                              batchId={parseInt(params.batchId)}
+                              fetchData={getAllDivisions}
+                            />
+                          }
+                          deleteLink={`/api/admin/division/${division.id}`}
                           fetchData={getAllDivisions}
                         />
-                      }
-                      deleteLink={`/api/admin/division/${division.id}`}
-                      fetchData={getAllDivisions}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Flex className="p-1 shadow-md border w-fit rounded-full">
-                      <Button
-                        variant="soft"
-                        onClick={() =>
-                          router.push(
-                            `/admin/batch/${params.batchId}/division/${division.id}/subject-teacher`
-                          )
-                        }
-                        radius="full"
-                        color="green"
-                      >
-                        <ArrowRightIcon />
-                      </Button>
-                    </Flex>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Flex className="p-1 shadow-md border w-fit rounded-full">
+                          <Button
+                            variant="soft"
+                            onClick={() =>
+                              router.push(
+                                `/admin/batch/${params.batchId}/division/${division.id}/subject-teacher`
+                              )
+                            }
+                            radius="full"
+                            color="green"
+                          >
+                            <ArrowRightIcon />
+                          </Button>
+                        </Flex>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
+            </>
           )}
         </Flex>
       </Card>

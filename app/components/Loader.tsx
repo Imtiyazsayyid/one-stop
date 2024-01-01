@@ -3,8 +3,9 @@ import React from "react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 const Loader = ({ isLoading }: { isLoading: boolean }) => {
+  if (!isLoading) return null;
   return (
-    <Flex className="w-full h-96" justify={"center"} align={"center"}>
+    <Flex className="h-full w-full" justify={"center"} align={"center"}>
       <ScaleLoader
         color={"var(--violet-a11)"}
         loading={isLoading}

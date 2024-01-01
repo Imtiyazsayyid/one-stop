@@ -12,13 +12,16 @@ import HeadingCard from "../components/HeadingCard";
 import Pagination from "../components/Pagination";
 import TableActions from "../components/TableActions";
 import { DetailedTeacher } from "../interfaces";
+import Loader from "@/app/components/Loader";
 
 const TeacherPage = () => {
   const [teachers, setTeachers] = useState<DetailedTeacher[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const getAllTeachers = async () => {
+    setLoading(true);
     const res = await axios.get("/api/admin/teacher", {
       params: {
         searchText,
@@ -29,6 +32,7 @@ const TeacherPage = () => {
     } else {
       toast.error("Server Error");
     }
+    setLoading(false);
   };
 
   const {
@@ -55,58 +59,65 @@ const TeacherPage = () => {
             />
             <AddNewButton link="/admin/teacher/new" />
           </Flex>
-          <Table.Root variant="surface" className="w-full h-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Profile</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Experience</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                {/* <Table.ColumnHeaderCell>Semesters</Table.ColumnHeaderCell> */}
-              </Table.Row>
-            </Table.Header>
+          <Loader isLoading={isLoading} />
+          {!isLoading && (
+            <>
+              <Table.Root variant="surface" className="w-full h-full">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Profile</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Experience</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                    {/* <Table.ColumnHeaderCell>Semesters</Table.ColumnHeaderCell> */}
+                  </Table.Row>
+                </Table.Header>
 
-            <Table.Body>
-              {teachers?.map((teacher, index) => (
-                <Table.Row key={index} align={"center"}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>
-                    <Avatar
-                      fallback={"?"}
-                      src={teacher.user.profileImg || ""}
-                      radius="full"
-                      className="shadow-md border"
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    {teacher.user.firstName + " " + teacher.user.lastName}
-                  </Table.Cell>
-                  <Table.Cell>{teacher.user.email}</Table.Cell>
-                  <Table.Cell>{teacher.role.name}</Table.Cell>
-                  <Table.Cell>
-                    {teacher.experience ? teacher.experience + " years" : "-"}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <TableActions
-                      editLink={`/admin/teacher/edit/${teacher.id}`}
-                      viewLink={`/admin/teacher/view/${teacher.id}`}
-                      deleteLink={`/api/admin/teacher/${teacher.id}`}
-                      fetchData={getAllTeachers}
-                    />
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+                <Table.Body>
+                  {teachers?.map((teacher, index) => (
+                    <Table.Row key={index} align={"center"}>
+                      <Table.Cell>{index + 1}</Table.Cell>
+                      <Table.Cell>
+                        <Avatar
+                          fallback={"?"}
+                          src={teacher.user.profileImg || ""}
+                          radius="full"
+                          className="shadow-md border"
+                        />
+                      </Table.Cell>
+                      <Table.Cell>
+                        {teacher.user.firstName + " " + teacher.user.lastName}
+                      </Table.Cell>
+                      <Table.Cell>{teacher.user.email}</Table.Cell>
+                      <Table.Cell>{teacher.role.name}</Table.Cell>
+                      <Table.Cell>
+                        {teacher.experience
+                          ? teacher.experience + " years"
+                          : "-"}
+                      </Table.Cell>
+                      <Table.Cell>
+                        <TableActions
+                          editLink={`/admin/teacher/edit/${teacher.id}`}
+                          viewLink={`/admin/teacher/view/${teacher.id}`}
+                          deleteLink={`/api/admin/teacher/${teacher.id}`}
+                          fetchData={getAllTeachers}
+                        />
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
+            </>
           )}
         </Flex>
       </Card>

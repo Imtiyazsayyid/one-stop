@@ -5,6 +5,7 @@ import ClearFiltersButton from "@/app/admin/components/ClearFiltersButton";
 import HeadingCard from "@/app/admin/components/HeadingCard";
 import Pagination from "@/app/admin/components/Pagination";
 import TableActions from "@/app/admin/components/TableActions";
+import Loader from "@/app/components/Loader";
 import SearchBar from "@/app/components/SearchBar";
 import usePagination from "@/app/hooks/usePagination";
 import { Subject, SubjectType } from "@prisma/client";
@@ -32,6 +33,7 @@ const SubjectPage = ({ params }: Props) => {
   const [filters, setFilters] = useState<Filters>({
     subjectType: "",
   });
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const {
@@ -42,6 +44,7 @@ const SubjectPage = ({ params }: Props) => {
   } = usePagination(subjects, 8);
 
   const getAllSubjects = async () => {
+    setLoading(true);
     const res = await axios.get("/api/admin/subject", {
       params: {
         semesterId: params.semesterId,
@@ -54,6 +57,7 @@ const SubjectPage = ({ params }: Props) => {
     } else {
       toast.error("Server Error");
     }
+    setLoading(false);
   };
 
   const resetFilters = () => {
@@ -122,63 +126,78 @@ const SubjectPage = ({ params }: Props) => {
               />
             </Flex>
           </Flex>
-          <Table.Root variant="surface" className="w-full h-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Abbreviation</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Subject Code</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Subject Type</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Units</Table.ColumnHeaderCell>
-              </Table.Row>
-            </Table.Header>
+          {<Loader isLoading={isLoading} />}
+          {!isLoading && (
+            <>
+              <Table.Root variant="surface" className="w-full h-full">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>
+                      Abbreviation
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>
+                      Subject Code
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>
+                      Subject Type
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Units</Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
 
-            <Table.Body>
-              {currentSubjects?.map((subject, index) => (
-                <Table.Row key={index} align={"center"}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{subject.name}</Table.Cell>
-                  <Table.Cell>{subject.abbr}</Table.Cell>
-                  <Table.Cell>{subject.code}</Table.Cell>
-                  <Table.Cell>
-                    {subjectTypeMapper[subject?.subjectType || "core_subject"]}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <TableActions
-                      editLink={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/edit/${subject.id}`}
-                      viewLink={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/view/${subject.id}`}
-                      deleteLink={`/api/admin/subject/${subject.id}`}
-                      fetchData={getAllSubjects}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Flex className="p-1 shadow-md border w-fit rounded-full">
-                      <Button
-                        variant="soft"
-                        onClick={() =>
-                          router.push(
-                            `/admin/course/${params.courseId}/semester/${params.semesterId}/subject/${subject.id}/unit`
-                          )
+                <Table.Body>
+                  {currentSubjects?.map((subject, index) => (
+                    <Table.Row key={index} align={"center"}>
+                      <Table.Cell>{index + 1}</Table.Cell>
+                      <Table.Cell>{subject.name}</Table.Cell>
+                      <Table.Cell>{subject.abbr}</Table.Cell>
+                      <Table.Cell>{subject.code}</Table.Cell>
+                      <Table.Cell>
+                        {
+                          subjectTypeMapper[
+                            subject?.subjectType || "core_subject"
+                          ]
                         }
-                        radius="full"
-                        color="green"
-                      >
-                        <ArrowRightIcon />
-                      </Button>
-                    </Flex>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+                      </Table.Cell>
+                      <Table.Cell>
+                        <TableActions
+                          editLink={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/edit/${subject.id}`}
+                          viewLink={`/admin/course/${params.courseId}/semester/${params.semesterId}/subject/view/${subject.id}`}
+                          deleteLink={`/api/admin/subject/${subject.id}`}
+                          fetchData={getAllSubjects}
+                        />
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Flex className="p-1 shadow-md border w-fit rounded-full">
+                          <Button
+                            variant="soft"
+                            onClick={() =>
+                              router.push(
+                                `/admin/course/${params.courseId}/semester/${params.semesterId}/subject/${subject.id}/unit`
+                              )
+                            }
+                            radius="full"
+                            color="green"
+                          >
+                            <ArrowRightIcon />
+                          </Button>
+                        </Flex>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
+            </>
           )}
         </Flex>
       </Card>

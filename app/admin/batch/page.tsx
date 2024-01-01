@@ -18,13 +18,16 @@ import { Course } from "@prisma/client";
 import { DateRangePicker } from "rsuite";
 import { DateRange } from "react-date-range";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import Loader from "@/app/components/Loader";
 
 const BatchPage = () => {
   const [batches, setBatches] = useState<DetailedBatch[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const getAllBatches = async () => {
+    setLoading(true);
     const res = await axios.get("/api/admin/batch", {
       params: {
         ...filters,
@@ -36,6 +39,7 @@ const BatchPage = () => {
     } else {
       toast.error("Server Error");
     }
+    setLoading(false);
   };
 
   const getAllCourses = async () => {
@@ -126,59 +130,64 @@ const BatchPage = () => {
               <AddNewButton link="/admin/batch/new" />
             </Flex>
           </Flex>
-          <Table.Root variant="surface" className="w-full h-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Course</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Duration</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Divisions</Table.ColumnHeaderCell>
-              </Table.Row>
-            </Table.Header>
+          {<Loader isLoading={isLoading} />}
+          {!isLoading && (
+            <>
+              <Table.Root variant="surface" className="w-full h-full">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Course</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Duration</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Divisions</Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
 
-            <Table.Body>
-              {batches?.map((batch, index) => (
-                <Table.Row key={index} align={"center"}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{batch.course.name}</Table.Cell>
-                  <Table.Cell>
-                    {moment(batch.fromDate).format("MMM YYYY")} -{" "}
-                    {moment(batch.toDate).format("MMM YYYY")}
-                  </Table.Cell>
+                <Table.Body>
+                  {batches?.map((batch, index) => (
+                    <Table.Row key={index} align={"center"}>
+                      <Table.Cell>{index + 1}</Table.Cell>
+                      <Table.Cell>{batch.course.name}</Table.Cell>
+                      <Table.Cell>
+                        {moment(batch.fromDate).format("MMM YYYY")} -{" "}
+                        {moment(batch.toDate).format("MMM YYYY")}
+                      </Table.Cell>
 
-                  <Table.Cell>
-                    <TableActions
-                      editLink={`/admin/batch/edit/${batch.id}`}
-                      viewLink={`/admin/batch/view/${batch.id}`}
-                      deleteLink={`/api/admin/batch/${batch.id}`}
-                      fetchData={getAllBatches}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Flex className="p-1 shadow-md border w-fit rounded-full">
-                      <Button
-                        variant="soft"
-                        onClick={() =>
-                          router.push(`/admin/batch/${batch.id}/division`)
-                        }
-                        radius="full"
-                        color="green"
-                      >
-                        <ArrowRightIcon />
-                      </Button>
-                    </Flex>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+                      <Table.Cell>
+                        <TableActions
+                          editLink={`/admin/batch/edit/${batch.id}`}
+                          viewLink={`/admin/batch/view/${batch.id}`}
+                          deleteLink={`/api/admin/batch/${batch.id}`}
+                          fetchData={getAllBatches}
+                        />
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Flex className="p-1 shadow-md border w-fit rounded-full">
+                          <Button
+                            variant="soft"
+                            onClick={() =>
+                              router.push(`/admin/batch/${batch.id}/division`)
+                            }
+                            radius="full"
+                            color="green"
+                          >
+                            <ArrowRightIcon />
+                          </Button>
+                        </Flex>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
+            </>
           )}
         </Flex>
       </Card>

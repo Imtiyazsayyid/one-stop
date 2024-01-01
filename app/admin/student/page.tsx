@@ -12,13 +12,16 @@ import HeadingCard from "../components/HeadingCard";
 import Pagination from "../components/Pagination";
 import TableActions from "../components/TableActions";
 import { DetailedStudent } from "../interfaces";
+import Loader from "@/app/components/Loader";
 
 const StudentPage = () => {
   const [students, setStudents] = useState<DetailedStudent[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const getAllStudents = async () => {
+    setLoading(true);
     const res = await axios.get("/api/admin/student", {
       params: {
         searchText,
@@ -29,6 +32,7 @@ const StudentPage = () => {
     } else {
       toast.error("Server Error");
     }
+    setLoading(false);
   };
 
   const {
@@ -55,54 +59,59 @@ const StudentPage = () => {
             />
             <AddNewButton link="/admin/student/new" />
           </Flex>
-          <Table.Root variant="surface" className="w-full h-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Profile</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Roll Number</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                {/* <Table.ColumnHeaderCell>Semesters</Table.ColumnHeaderCell> */}
-              </Table.Row>
-            </Table.Header>
+          {<Loader isLoading={isLoading} />}
+          {!isLoading && (
+            <>
+              <Table.Root variant="surface" className="w-full h-full">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Profile</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Roll Number</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                    {/* <Table.ColumnHeaderCell>Semesters</Table.ColumnHeaderCell> */}
+                  </Table.Row>
+                </Table.Header>
 
-            <Table.Body>
-              {students?.map((student, index) => (
-                <Table.Row key={index} align={"center"}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>
-                    <Avatar
-                      fallback={"?"}
-                      src={student.user.profileImg || ""}
-                      radius="full"
-                      className="shadow-md border"
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    {student.user.firstName + " " + student.user.lastName}
-                  </Table.Cell>
-                  <Table.Cell>{student.rollNumber}</Table.Cell>
-                  <Table.Cell>{student.user.email}</Table.Cell>
-                  <Table.Cell>
-                    <TableActions
-                      editLink={`/admin/student/edit/${student.id}`}
-                      viewLink={`/admin/student/view/${student.id}`}
-                      deleteLink={`/api/admin/student/${student.id}`}
-                      fetchData={getAllStudents}
-                    />
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+                <Table.Body>
+                  {students?.map((student, index) => (
+                    <Table.Row key={index} align={"center"}>
+                      <Table.Cell>{index + 1}</Table.Cell>
+                      <Table.Cell>
+                        <Avatar
+                          fallback={"?"}
+                          src={student.user.profileImg || ""}
+                          radius="full"
+                          className="shadow-md border"
+                        />
+                      </Table.Cell>
+                      <Table.Cell>
+                        {student.user.firstName + " " + student.user.lastName}
+                      </Table.Cell>
+                      <Table.Cell>{student.rollNumber}</Table.Cell>
+                      <Table.Cell>{student.user.email}</Table.Cell>
+                      <Table.Cell>
+                        <TableActions
+                          editLink={`/admin/student/edit/${student.id}`}
+                          viewLink={`/admin/student/view/${student.id}`}
+                          deleteLink={`/api/admin/student/${student.id}`}
+                          fetchData={getAllStudents}
+                        />
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
+            </>
           )}
         </Flex>
       </Card>

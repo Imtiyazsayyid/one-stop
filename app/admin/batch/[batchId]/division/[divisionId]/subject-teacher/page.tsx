@@ -19,6 +19,7 @@ import Pagination from "@/app/admin/components/Pagination";
 import toast from "react-hot-toast";
 import SearchBar from "@/app/components/SearchBar";
 import ClearFiltersButton from "@/app/admin/components/ClearFiltersButton";
+import Loader from "@/app/components/Loader";
 
 interface Props {
   params: {
@@ -32,6 +33,7 @@ const SubjectTeacherPage = ({ params }: Props) => {
     DetailedDivisionSubjectTeacher[]
   >([]);
 
+  const [isLoading, setLoading] = useState(false);
   const [division, setDivision] = useState<Division>();
   const [subjects, setSubjects] = useState<DetailedSubject[]>([]);
   const [teachers, setTeachers] = useState<DetailedTeacher[]>([]);
@@ -54,12 +56,14 @@ const SubjectTeacherPage = ({ params }: Props) => {
   } = usePagination(subjects, 10);
 
   const getSubjectTeacher = async () => {
+    setLoading(true);
     const res = await axios.get("/api/admin/teacher-subject-division", {
       params: {
         divisionId: params.divisionId,
       },
     });
 
+    setLoading(false);
     setSubjectTeachers(res.data.data);
   };
 
@@ -174,56 +178,63 @@ const SubjectTeacherPage = ({ params }: Props) => {
               />
             </Flex>
           </Flex>
-          <Table.Root variant="surface" className="h-full">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="w-1/2">
-                  Subject
-                </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="w-1/4"></Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="w-1/4">
-                  Teacher
-                </Table.ColumnHeaderCell>
-              </Table.Row>
-            </Table.Header>
+          <Loader isLoading={isLoading} />
+          {!isLoading && (
+            <>
+              <Table.Root variant="surface" className="h-full">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="w-1/2">
+                      Subject
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="w-1/4"></Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="w-1/4">
+                      Teacher
+                    </Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
 
-            <Table.Body>
-              {currentSubjects.map((subject, index) => (
-                <Table.Row key={index} align={"center"}>
-                  <Table.RowHeaderCell>{index + 1}</Table.RowHeaderCell>
-                  <Table.Cell>{subject.name}</Table.Cell>
-                  <Table.Cell>
-                    <Text className="text-xs text-slate-400">
-                      Semester {subject.semester.semNumber}
-                    </Text>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <SelectPicker
-                      size="md"
-                      data={teachers.map((teacher) => ({
-                        label:
-                          teacher.user.firstName + " " + teacher.user.lastName,
-                        value: teacher.id,
-                      }))}
-                      style={{ width: 224 }}
-                      value={getTeacherForSubject(subject.id)}
-                      onChange={async (val) => {
-                        saveSubjectTeacher(subject.id, val);
-                        await getSubjectTeacher();
-                      }}
-                    />
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
+                <Table.Body>
+                  {currentSubjects.map((subject, index) => (
+                    <Table.Row key={index} align={"center"}>
+                      <Table.RowHeaderCell>{index + 1}</Table.RowHeaderCell>
+                      <Table.Cell>{subject.name}</Table.Cell>
+                      <Table.Cell>
+                        <Text className="text-xs text-slate-400">
+                          Semester {subject.semester.semNumber}
+                        </Text>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <SelectPicker
+                          size="md"
+                          data={teachers.map((teacher) => ({
+                            label:
+                              teacher.user.firstName +
+                              " " +
+                              teacher.user.lastName,
+                            value: teacher.id,
+                          }))}
+                          style={{ width: 224 }}
+                          value={getTeacherForSubject(subject.id)}
+                          onChange={async (val) => {
+                            saveSubjectTeacher(subject.id, val);
+                            await getSubjectTeacher();
+                          }}
+                        />
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
+              )}
+            </>
           )}
         </Flex>
       </Card>
