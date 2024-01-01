@@ -1,6 +1,6 @@
 "use client";
 
-import { DetailedTeacher } from "@/app/admin/interfaces";
+import { DetailedStudent } from "@/app/admin/interfaces";
 import FormattedHTML from "@/app/components/FormattedHTML";
 import Seperator from "@/app/components/Seperator";
 import { Avatar, Flex, Text } from "@radix-ui/themes";
@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Card from "../../../components/Card";
 import HeadingCard from "../../../components/HeadingCard";
+import moment from "moment";
 
 interface Props {
   params: {
@@ -16,185 +17,101 @@ interface Props {
   };
 }
 
-const EditTeacherPage = ({ params }: Props) => {
-  const [teacher, setTeacher] = useState<DetailedTeacher>();
+const EditStudentPage = ({ params }: Props) => {
+  const [student, setStudent] = useState<DetailedStudent>();
 
-  const getTeacher = async () => {
+  const getStudent = async () => {
     try {
-      const res = await axios.get(`/api/admin/teacher/${params.id}`);
+      const res = await axios.get(`/api/admin/student/${params.id}`);
       if (!res.data.status) {
         toast.error(res.data.error);
         return;
       }
 
-      setTeacher(res.data.data);
+      setStudent(res.data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getTeacher();
+    getStudent();
   }, []);
 
   return (
     <Flex direction={"column"} className="w-full" gap={"2"}>
       <HeadingCard
         title={
-          (teacher &&
-            teacher.role.name +
-              " - " +
-              teacher?.user.firstName +
-              " " +
-              teacher?.user.lastName) ||
-          ""
+          "Student - " +
+          ((student &&
+            student?.user.firstName + " " + student?.user.lastName) ||
+            "")
         }
       ></HeadingCard>
       <Card className="h-full p-10 flex-col pt-20 overflow-hidden overflow-y-scroll">
         <Flex className="p-10" direction={"column"} gap={"9"} align={"center"}>
-          <Flex justify={"center"} className="px-10 w-2/3">
+          <Flex
+            align={"center"}
+            className="px-10 w-2/3"
+            direction={"column"}
+            mb={"5"}
+            gap={"9"}
+          >
             <Avatar
               fallback={"?"}
-              src={teacher?.user.profileImg || ""}
+              src={student?.user.profileImg || ""}
               radius="full"
               size={"9"}
-              mb={"9"}
             />
+            <Flex direction={"column"} gap={"2"}>
+              <Text className="text-slate-500 text-xs">Roll Number</Text>
+              <Text>{student?.rollNumber || "-"}</Text>
+            </Flex>
           </Flex>
           <Flex justify={"between"} className="px-10 w-2/3">
             <Flex direction={"column"} gap={"2"}>
               <Text className="text-slate-500 text-xs">Name</Text>
               <Text>
-                {(teacher &&
-                  teacher?.user.firstName + " " + teacher?.user.lastName) ||
+                {(student &&
+                  student?.user.firstName + " " + student?.user.lastName) ||
                   "-"}
               </Text>
             </Flex>
 
             <Flex direction={"column"} gap={"2"}>
               <Text className="text-slate-500 text-xs">Email</Text>
-              <Text>{teacher?.user.email || "-"}</Text>
+              <Text>{student?.user.email || "-"}</Text>
             </Flex>
 
             <Flex direction={"column"} gap={"2"}>
-              <Text className="text-slate-500 text-xs">
-                Teaching Experience
+              <Text className="text-slate-500 text-xs">Gender</Text>
+              <Text>
+                {(student &&
+                  student.user.gender[0].toUpperCase() +
+                    student.user.gender.substring(1)) ||
+                  "-"}
               </Text>
-              <Text>{teacher?.experience || "-"} years</Text>
             </Flex>
           </Flex>
+          <Flex justify={"between"} className="px-10 w-2/3">
+            <Flex direction={"column"} gap={"2"}>
+              <Text className="text-slate-500 text-xs">Course</Text>
+              <Text>{student?.course.abbr || "-"}</Text>
+            </Flex>
 
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
+            <Flex direction={"column"} gap={"2"}>
+              <Text className="text-slate-500 text-xs">Batch</Text>
+              <Text>
+                {moment(student?.batch.fromDate).format("MMM YYYY") +
+                  " - " +
+                  moment(student?.batch.toDate).format("YY") || "-"}
+              </Text>
+            </Flex>
 
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">About Me</Text>
-            <div>
-              <FormattedHTML value={teacher?.about || ""} />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">Qualification</Text>
-            <div>
-              <FormattedHTML value={teacher?.qualification || ""} />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">
-              Awards and Recognition
-            </Text>
-            <div>
-              <FormattedHTML value={teacher?.awardsAndRecognition || ""} />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">
-              Guest Speaker and Resource Person
-            </Text>
-            <div>
-              <FormattedHTML
-                value={teacher?.guestSpeakerAndResourcePerson || ""}
-              />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">
-              Participation in Conferences Workshops and Training Programs
-            </Text>
-            <div>
-              <FormattedHTML value={teacher?.participationInCWTP || ""} />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">
-              Research Publications
-            </Text>
-            <div>
-              <FormattedHTML value={teacher?.researchPublications || ""} />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">
-              Certification Courses
-            </Text>
-            <div>
-              <FormattedHTML value={teacher?.certificationCourses || ""} />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">Books or Chapters</Text>
-            <div>
-              <FormattedHTML value={teacher?.booksOrChapter || ""} />
-            </div>
-          </Flex>
-
-          <Flex className="w-2/3">
-            <Seperator className="w-full" />
-          </Flex>
-
-          <Flex direction={"column"} className="w-2/3 px-10" gap={"2"}>
-            <Text className="text-slate-500 text-xs">
-              Professional Memberships
-            </Text>
-            <div>
-              <FormattedHTML value={teacher?.professionalMemberships || ""} />
-            </div>
+            <Flex direction={"column"} gap={"2"}>
+              <Text className="text-slate-500 text-xs">Division</Text>
+              <Text>{student?.division.name || "-"}</Text>
+            </Flex>
           </Flex>
         </Flex>
       </Card>
@@ -202,4 +119,4 @@ const EditTeacherPage = ({ params }: Props) => {
   );
 };
 
-export default EditTeacherPage;
+export default EditStudentPage;

@@ -29,6 +29,9 @@ export type DetailedTeacher = Teacher & {
 
 export type DetailedStudent = Student & {
   user: User;
+  course: Course;
+  batch: Batch;
+  division: Division;
 };
 
 export type DetailedBatch = Batch & {

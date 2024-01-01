@@ -12,6 +12,7 @@ export async function GET(
     const student = await prisma.student.findUnique({
       include: {
         user: true,
+        course: true,
         division: true,
         batch: true,
         studentCertificates: true,
