@@ -61,6 +61,7 @@ const StudentPage = () => {
                 <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Profile</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>Roll Number</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
                 <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
                 {/* <Table.ColumnHeaderCell>Semesters</Table.ColumnHeaderCell> */}
@@ -82,6 +83,7 @@ const StudentPage = () => {
                   <Table.Cell>
                     {student.user.firstName + " " + student.user.lastName}
                   </Table.Cell>
+                  <Table.Cell>{student.rollNumber}</Table.Cell>
                   <Table.Cell>{student.user.email}</Table.Cell>
                   <Table.Cell>
                     <TableActions

@@ -42,12 +42,43 @@ export async function GET(request: NextRequest) {
   }
 }
 
-const getRollNumber = (division: DetailedDivision) => {
+const getRollNumber = async (division: DetailedDivision) => {
   const studentCount = division.students.length + 1;
   let numberString = studentCount.toString();
   let paddedNumberString = numberString.padStart(4, "0");
 
   let rollNumber = division.name + paddedNumberString;
+
+  const existingStudent = await prisma.student.findFirst({
+    where: {
+      rollNumber,
+    },
+  });
+
+  if (existingStudent) {
+    const allStudents = await prisma.student.findMany({
+      where: {
+        divisionId: division.id,
+      },
+      orderBy: {
+        rollNumber: "asc",
+      },
+    });
+
+    let lastExistingRollNumber = allStudents[allStudents.length - 1].rollNumber;
+    let numberPart: string | number = lastExistingRollNumber.substring(
+      lastExistingRollNumber.length - 4
+    );
+
+    numberPart = parseInt(numberPart);
+    numberPart = numberPart + 1;
+
+    numberString = numberPart.toString();
+    paddedNumberString = numberString.padStart(4, "0");
+
+    rollNumber = division.name + paddedNumberString;
+  }
+
   return rollNumber;
 };
 
@@ -101,7 +132,7 @@ export async function POST(request: NextRequest) {
 
     const newStudent = await prisma.student.create({
       data: {
-        rollNumber: getRollNumber(division),
+        rollNumber: await getRollNumber(division),
         userId: newUser.id,
         courseId: body.courseId,
         batchId: body.batchId,
