@@ -1,4 +1,3 @@
-// import { batchSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import moment from "moment";
 import { NextRequest, NextResponse } from "next/server";
