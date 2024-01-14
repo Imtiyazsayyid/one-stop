@@ -65,7 +65,7 @@ model Course {
 
   semesters Semester[]
   batches   Batch[]
-  students Student[]
+  students  Student[]
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -99,6 +99,7 @@ model Subject {
 
   divisionTeacherMap DivisionTeacherSubjectMapper[]
   units              Unit[]
+  divisionTime       DivisionSubjectTime[]
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -207,7 +208,8 @@ model Division {
   batchId Int
   batch   Batch  @relation(fields: [batchId], references: [id])
 
-  students Student[]
+  students     Student[]
+  subjectsTime DivisionSubjectTime[]
 
   teacherSubjectMap DivisionTeacherSubjectMapper[]
 }
@@ -229,7 +231,7 @@ model Student {
   rollNumber String
 
   courseId   Int
-  course     Course  @relation(fields: [courseId], references: [id])
+  course     Course   @relation(fields: [courseId], references: [id])
   batchId    Int
   batch      Batch    @relation(fields: [batchId], references: [id])
   divisionId Int
@@ -272,4 +274,29 @@ model StudentDocuments {
 enum StudentMaterialType {
   img
   pdf
+}
+
+model DivisionSubjectTime {
+  id         Int       @id @default(autoincrement())
+  divisionId Int
+  division   Division  @relation(fields: [divisionId], references: [id])
+  from       String
+  to         String
+  dayOfWeek  DayOfWeek
+  subjectId  Int
+  subject    Subject   @relation(fields: [subjectId], references: [id])
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
 }

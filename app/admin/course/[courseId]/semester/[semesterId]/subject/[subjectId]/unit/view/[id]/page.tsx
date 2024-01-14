@@ -87,7 +87,7 @@ const ViewUnitPage = ({ params }: Props) => {
           </Flex>
           {imgUnitMaterial.length > 0 && (
             <Flex
-              className="w-4/5 h-72"
+              className="w-4/5 h-96"
               direction={"column"}
               gap={"5"}
               align={"center"}
@@ -116,7 +116,7 @@ const ViewUnitPage = ({ params }: Props) => {
 
           {videoUnitMaterial.length > 0 && (
             <Flex
-              className="w-4/5 h-72"
+              className="w-4/5 h-96"
               direction={"column"}
               align={"center"}
               gap={"5"}
@@ -152,7 +152,7 @@ const ViewUnitPage = ({ params }: Props) => {
           )}
           {pdfUnitMaterial.length > 0 && (
             <Flex
-              className="w-4/5 h-72"
+              className="w-4/5 h-96"
               direction={"column"}
               gap={"5"}
               align={"center"}

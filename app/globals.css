@@ -48,6 +48,24 @@ body {
   display: none;
 }
 
+.rs-picker-error > .rs-input-group {
+  border: 0.5px solid lightgray !important;
+}
+
+.rs-input-group {
+  overflow: hidden;
+}
+
+.rs-input {
+  background: var(--blue-a3);
+  border-radius: 0;
+}
+
+.rs-picker-error > .rs-input-group:focus-within {
+  outline: 1.5px solid var(--blue-a9) !important;
+  transition: all 0.1s;
+}
+
 h1 {
   font-weight: 700;
   font-size: 2.5rem;

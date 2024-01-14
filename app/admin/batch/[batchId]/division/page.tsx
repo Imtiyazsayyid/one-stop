@@ -5,7 +5,7 @@ import Pagination from "@/app/admin/components/Pagination";
 import TableActions from "@/app/admin/components/TableActions";
 import usePagination from "@/app/hooks/usePagination";
 import { Division } from "@prisma/client";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { ArrowRightIcon, CalendarIcon } from "@radix-ui/react-icons";
 import { Button, Flex, Table } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -74,8 +74,13 @@ const DivisionPage = ({ params }: Props) => {
                   <Table.Row>
                     <Table.ColumnHeaderCell>#</Table.ColumnHeaderCell>
                     <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="w-72">
+                      Actions
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="w-60">
+                      Time Table
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="w-72">
                       Subject Teachers
                     </Table.ColumnHeaderCell>
                   </Table.Row>
@@ -99,6 +104,22 @@ const DivisionPage = ({ params }: Props) => {
                           deleteLink={`/api/admin/division/${division.id}`}
                           fetchData={getAllDivisions}
                         />
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Flex className="p-1 shadow-md border w-fit rounded-full">
+                          <Button
+                            variant="soft"
+                            onClick={() =>
+                              router.push(
+                                `/admin/batch/${params.batchId}/division/${division.id}/timetable`
+                              )
+                            }
+                            radius="full"
+                            color="orange"
+                          >
+                            <CalendarIcon />
+                          </Button>
+                        </Flex>
                       </Table.Cell>
                       <Table.Cell>
                         <Flex className="p-1 shadow-md border w-fit rounded-full">
