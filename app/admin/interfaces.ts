@@ -1,8 +1,10 @@
 import {
+  Attendance,
   Batch,
   BatchSemesterMapper,
   Course,
   Division,
+  DivisionSubjectTime,
   DivisionTeacherSubjectMapper,
   Semester,
   Student,
@@ -32,6 +34,7 @@ export type DetailedStudent = Student & {
   course: Course;
   batch: Batch;
   division: Division;
+  attendance: Attendance;
 };
 
 export type DetailedBatch = Batch & {
@@ -54,4 +57,8 @@ export type DetailedDivisionSubjectTeacher = DivisionTeacherSubjectMapper & {
 
 export type DetailedUnit = Unit & {
   unitMaterial: UnitMaterial[];
+};
+
+export type DetailedDivisionSubjectTime = DivisionSubjectTime & {
+  subject: DetailedSubject;
 };

@@ -13,6 +13,7 @@ import { FaUsers } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { ArrowLeftIcon, Cross1Icon } from "@radix-ui/react-icons";
 import { FaUserGraduate } from "react-icons/fa6";
+import { LuSheet } from "react-icons/lu";
 
 const Links = [
   {
@@ -40,6 +41,11 @@ const Links = [
     link: "/admin/batch",
     icon: <HiSquare2Stack className="text-xl " />,
   },
+  {
+    label: "Attendance",
+    link: "/admin/attendance",
+    icon: <LuSheet className="text-lg " />,
+  },
 ];
 
 const VerticalNavBar = () => {
@@ -61,14 +67,8 @@ const VerticalNavBar = () => {
   const router = useRouter();
   return (
     <Flex className="w-[350px]">
-      <Cross1Icon
-        className="relative left-[91%] top-5 cursor-pointer"
-        onClick={() => setActive(false)}
-      />
-      <Flex
-        className=" bg-white border shadow-lg rounded-lg w-full p-5"
-        direction={"column"}
-      >
+      <Cross1Icon className="relative left-[91%] top-5 cursor-pointer" onClick={() => setActive(false)} />
+      <Flex className=" bg-white border shadow-lg rounded-lg w-full p-5" direction={"column"}>
         <Heading className="pt-6 pr-5 pl-5 " mt={"2"} mb={"6"}>
           Vidyalankar School of Information Technology
         </Heading>
@@ -77,8 +77,7 @@ const VerticalNavBar = () => {
             key={link}
             onClick={() => handleClick(link)}
             className={`h-16 rounded-none hover:shadow-md pl-5 hover:rounded-xl cursor-pointer ${
-              link === currentPathName &&
-              "bg-[var(--violet-a11)] text-white rounded-xl"
+              link === currentPathName && "bg-[var(--violet-a11)] text-white rounded-xl"
             }`}
             align={"center"}
           >

@@ -2,7 +2,6 @@
 
 import { courseSchema } from "@/app/validationSchemas";
 import { Button, Flex, Text, TextField } from "@radix-ui/themes";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import "react-quill/dist/quill.snow.css";
 import "@/app/styles/ReactQuillStyle.css";
@@ -190,9 +189,7 @@ const Form = ({
             <TextField.Input
               value={courseDetails.name}
               size={"2"}
-              onChange={(e) =>
-                setCourseDetails({ ...courseDetails, name: e.target.value })
-              }
+              onChange={(e) => setCourseDetails({ ...courseDetails, name: e.target.value })}
             />
           </TextField.Root>
         </Flex>
@@ -204,9 +201,7 @@ const Form = ({
           <TextField.Root>
             <TextField.Input
               value={courseDetails.abbr}
-              onChange={(e) =>
-                setCourseDetails({ ...courseDetails, abbr: e.target.value })
-              }
+              onChange={(e) => setCourseDetails({ ...courseDetails, abbr: e.target.value })}
             />
           </TextField.Root>
         </Flex>

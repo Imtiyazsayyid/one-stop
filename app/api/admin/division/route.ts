@@ -17,6 +17,9 @@ export async function GET(request: NextRequest) {
       where: {
         batchId: parseInt(batchId),
       },
+      orderBy: {
+        name: "asc",
+      },
     });
 
     return NextResponse.json({

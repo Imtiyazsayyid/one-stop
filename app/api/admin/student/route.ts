@@ -32,6 +32,9 @@ export async function GET(request: NextRequest) {
       where: {
         ...where,
       },
+      orderBy: {
+        rollNumber: "asc",
+      },
     });
     return NextResponse.json({ data: students, status: true });
   } catch (error) {
@@ -66,9 +69,7 @@ const getRollNumber = async (division: DetailedDivision) => {
     });
 
     let lastExistingRollNumber = allStudents[allStudents.length - 1].rollNumber;
-    let numberPart: string | number = lastExistingRollNumber.substring(
-      lastExistingRollNumber.length - 4
-    );
+    let numberPart: string | number = lastExistingRollNumber.substring(lastExistingRollNumber.length - 4);
 
     numberPart = parseInt(numberPart);
     numberPart = numberPart + 1;

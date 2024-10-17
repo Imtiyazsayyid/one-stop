@@ -101,6 +101,8 @@ model Subject {
   units              Unit[]
   divisionTime       DivisionSubjectTime[]
 
+  attendance        Attendance[]
+
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
@@ -239,6 +241,7 @@ model Student {
 
   studentCertificates StudentCertificate[]
   studentDocuments    StudentDocuments[]
+  attendance          Attendance[]
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -285,6 +288,20 @@ model DivisionSubjectTime {
   dayOfWeek  DayOfWeek
   subjectId  Int
   subject    Subject   @relation(fields: [subjectId], references: [id])
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model Attendance {
+  id               Int       @id @default(autoincrement())
+  dateAndTime      DateTime  @default(now())
+  subjectId        Int?  
+  subject          Subject?   @relation(fields: [subjectId], references: [id])
+  studentId        Int
+  student          Student   @relation(fields: [studentId], references: [id])
+
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())

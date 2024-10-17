@@ -71,15 +71,7 @@ export async function POST(request: NextRequest) {
 
     let insertableArray: any[] = [];
 
-    const daysOfWeek = [
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-      "sunday",
-    ];
+    const daysOfWeek = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
     for (let timeSlot of body.subjectsByTime) {
       let objArray = [];

@@ -16,7 +16,7 @@ import { DetailedBatch } from "../interfaces";
 import ClearFiltersButton from "../components/ClearFiltersButton";
 import { Course } from "@prisma/client";
 import { DateRangePicker } from "rsuite";
-import { DateRange } from "react-date-range";
+
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Loader from "@/app/components/Loader";
 
@@ -51,12 +51,7 @@ const BatchPage = () => {
     }
   };
 
-  const {
-    currentPage,
-    currentItems: currentBatches,
-    setCurrentPage,
-    totalPages,
-  } = usePagination(batches, 5);
+  const { currentPage, currentItems: currentBatches, setCurrentPage, totalPages } = usePagination(batches, 5);
 
   const [filters, setFilters] = useState({
     courseId: "",
@@ -72,9 +67,7 @@ const BatchPage = () => {
 
   const customRenderValue = (value: Date[], formatString: string) => {
     if (value && value.length === 2) {
-      return `${moment(value[0]).format("DD MMM, YYYY")} to ${moment(
-        value[1]
-      ).format("DD MMM, YYYY")}`;
+      return `${moment(value[0]).format("DD MMM, YYYY")} to ${moment(value[1]).format("DD MMM, YYYY")}`;
     }
     return "";
   };
@@ -95,20 +88,13 @@ const BatchPage = () => {
                 value={filters.dateRange as [Date, Date]}
                 size="sm"
                 format="dd MMM, yyyy"
-                onChange={(val) =>
-                  setFilters({ ...filters, dateRange: val ? val : "" })
-                }
+                onChange={(val) => setFilters({ ...filters, dateRange: val ? val : "" })}
                 placeholder="Select Date Range"
                 className="w-72"
                 renderValue={customRenderValue}
                 showOneCalendar
               />
-              <Select.Root
-                onValueChange={(val) =>
-                  setFilters({ ...filters, courseId: val })
-                }
-                value={filters.courseId}
-              >
+              <Select.Root onValueChange={(val) => setFilters({ ...filters, courseId: val })} value={filters.courseId}>
                 <Select.Trigger
                   className="w-96 focus:outline-none hover:outline-none"
                   placeholder="Select Course"
@@ -123,10 +109,7 @@ const BatchPage = () => {
                   ))}
                 </Select.Content>
               </Select.Root>
-              <ClearFiltersButton
-                filters={filters}
-                resetFilters={resetFilters}
-              />
+              <ClearFiltersButton filters={filters} resetFilters={resetFilters} />
               <AddNewButton link="/admin/batch/new" />
             </Flex>
           </Flex>
@@ -150,8 +133,7 @@ const BatchPage = () => {
                       <Table.Cell>{index + 1}</Table.Cell>
                       <Table.Cell>{batch.course.name}</Table.Cell>
                       <Table.Cell>
-                        {moment(batch.fromDate).format("MMM YYYY")} -{" "}
-                        {moment(batch.toDate).format("MMM YYYY")}
+                        {moment(batch.fromDate).format("MMM YYYY")} - {moment(batch.toDate).format("MMM YYYY")}
                       </Table.Cell>
 
                       <Table.Cell>
@@ -166,9 +148,7 @@ const BatchPage = () => {
                         <Flex className="p-1 shadow-md border w-fit rounded-full">
                           <Button
                             variant="soft"
-                            onClick={() =>
-                              router.push(`/admin/batch/${batch.id}/division`)
-                            }
+                            onClick={() => router.push(`/admin/batch/${batch.id}/division`)}
                             radius="full"
                             color="green"
                           >
@@ -181,11 +161,7 @@ const BatchPage = () => {
                 </Table.Body>
               </Table.Root>
               {totalPages > 1 && (
-                <Pagination
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                  totalPages={totalPages}
-                />
+                <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} totalPages={totalPages} />
               )}
             </>
           )}
